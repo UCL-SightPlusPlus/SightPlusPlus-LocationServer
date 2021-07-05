@@ -1,3 +1,4 @@
+require('dotenv').config() //load env vars in global var process.env
 var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000,
@@ -8,7 +9,8 @@ var express = require('express'),
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Tododb'); 
+mongoose.connect(process.env.DATABASE_URL); 
+console.log(process.env.DATABASE_URL)
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
