@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/LydiaTsami/SightPlusPlus#readme",
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.9"
   },
   "dependencies": {
