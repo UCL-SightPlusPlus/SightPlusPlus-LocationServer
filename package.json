@@ -1,0 +1,26 @@
+{
+  "name": "sightplusplus",
+  "version": "1.0.0",
+  "description": "UCL's Sight++ v3 project .",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LydiaTsami/SightPlusPlus.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LydiaTsami/SightPlusPlus/issues"
+  },
+  "homepage": "https://github.com/LydiaTsami/SightPlusPlus#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.9"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.13.2"
+  }
+}
