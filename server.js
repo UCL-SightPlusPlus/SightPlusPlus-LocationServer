@@ -7,9 +7,9 @@ var express = require('express'),
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Tododb'); 
+mongoose.connect('mongodb://localhost/Tododb', {useNewUrlParser: true, useUnifiedTopology: true}); 
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
 var recordRoutes = require('./api/routes/recordRoute'); //importing route
