@@ -3,17 +3,14 @@ var express = require('express'),
   port = process.env.PORT || 3000,
   mongoose = require('mongoose'),
   Device = require('./api/models/deviceModel'), //created model loading here
-  Record = require('./api/models/recordModel'),
-  bodyParser = require('body-parser');
+  Record = require('./api/models/recordModel');
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/Tododb'); 
 
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
+app.use(express.urlencoded());
+app.use(express.json());
 
 var recordRoutes = require('./api/routes/recordRoute'); //importing route
 var deviceRoutes = require('./api/routes/deviceRoute');
@@ -22,7 +19,6 @@ recordRoutes(app); //register the route
 
 
 
-app.listen(port);
-
-
-console.log('todo list RESTful API server started on: ' + port);
+app.listen(port, () => {
+    console.log('Sight++ RESTful API server started on: ' + port);
+});
