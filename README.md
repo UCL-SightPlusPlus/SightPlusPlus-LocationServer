@@ -11,7 +11,9 @@ npm i --save-dev nodemon dotenv
 * Environment settings
 Create a .env file in the project folder and save your environment settings
 ```
-DATABASE_URL = $database_url
+DATABASE_HOST = $dbHost
+DATABASE_PORT = $dbPort
+DATABASE_NAME = $dbName
 ```
 Start the api
 ```
