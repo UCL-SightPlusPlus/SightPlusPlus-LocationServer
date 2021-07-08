@@ -9,8 +9,7 @@ var express = require('express'),
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE_URL); 
-console.log(process.env.DATABASE_URL)
+mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`);
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
