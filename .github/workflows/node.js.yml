@@ -24,7 +24,9 @@ jobs:
     - name: Create env file
       run: |
         touch .env
-        echo DATABASE_URL=mongodb://localhost/Tododb >> .env
+        echo DATABASE_HOST=localhost >> .env
+        echo DATABASE_PORT=27017 >> .env
+        echo DATABASE_NAME=SightPlusPlus >> .env
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
