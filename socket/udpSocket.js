@@ -5,7 +5,7 @@ module.exports = () => {
     udpServer = dgram.createSocket('udp4');
   
   udpServer.on('listening', () => {
-      console.log('udp server listening on 7979.');
+      console.log(`udp server listening on ${process.env.UDP_PORT}.`);
   });
   
   udpServer.on('message', (msg, rinfo) => {
@@ -18,5 +18,5 @@ module.exports = () => {
     console.log(err);
   });
   
-  udpServer.bind(7979, '127.0.0.1');
+  udpServer.bind(process.env.UDP_PORT, process.env.UDP_SERVER_HOST);
 }
