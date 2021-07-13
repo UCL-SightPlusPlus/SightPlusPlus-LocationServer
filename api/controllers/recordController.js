@@ -21,3 +21,11 @@ exports.create_a_record = function(req, res) {
     });
 };
 
+exports.read_a_record = function(req, res) {
+    Record.findById(req.params.recordId, function(err, record) {
+      if (err)
+        res.send(err);
+      res.json(record);
+    });
+}
+
