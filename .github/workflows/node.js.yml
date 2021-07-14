@@ -27,6 +27,8 @@ jobs:
         echo DATABASE_HOST=localhost >> .env
         echo DATABASE_PORT=27017 >> .env
         echo DATABASE_NAME=SightPlusPlus >> .env
+        echo UDP_SERVER_HOST=localhost >> .env
+        echo UDP_PORT=7979 >> .env
         echo DEVICE_CRON=0 * * * * >> .env
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2

@@ -6,8 +6,11 @@ var express = require('express'),
   Device = require('./api/models/deviceModel'), //created model loading here
   Record = require('./api/models/recordModel');
 
+// Start the scheduler
 var updater = require('./schedulers/deviceUpdater');
-
+// start socket server
+var socketServer = require('./socket/udpSocket');
+socketServer();
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
