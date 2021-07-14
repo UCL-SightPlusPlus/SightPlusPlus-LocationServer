@@ -5,10 +5,16 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Device = require('./api/models/deviceModel'), //created model loading here
   Record = require('./api/models/recordModel');
+
+var updater = require('./schedulers/deviceUpdater');
+
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {useNewUrlParser: true, useUnifiedTopology: true});
+
+//Initialize scheduler
+updater.run_scheduler(process.env.DEVICE_CRON);
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());

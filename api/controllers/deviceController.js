@@ -4,6 +4,8 @@
 var mongoose = require('mongoose'),
   Device = mongoose.model('Devices');
 
+var updater = require('../../schedulers/deviceUpdater');
+
 
 exports.list_all_devices = function(req, res) {
     Device.find({}, function(err, task) {
@@ -20,6 +22,7 @@ exports.create_a_device = function(req, res) {
         res.send(err);
       res.json(device);
     });
+    updater.updateDeviceTable();
 };
 
 exports.read_a_device = function(req, res) {
@@ -37,6 +40,7 @@ exports.update_a_device = function(req, res) {
       res.send(err);
     res.json(device);
   });
+  updater.updateDeviceTable();
 };
 
 exports.delete_a_device = function(req, res) {
@@ -46,6 +50,7 @@ exports.delete_a_device = function(req, res) {
     if (err)
       res.send(err);
     res.json({ message: 'Device successfully deleted' });
+    updater.updateDeviceTable();
   });
 };
 
