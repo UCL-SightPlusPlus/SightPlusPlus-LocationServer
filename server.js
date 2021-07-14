@@ -5,6 +5,10 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Device = require('./api/models/deviceModel'), //created model loading here
   Record = require('./api/models/recordModel');
+
+// start socket server
+var socketServer = require('./socket/udpSocket');
+socketServer();
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
