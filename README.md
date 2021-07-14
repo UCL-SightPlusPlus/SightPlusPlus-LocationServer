@@ -14,6 +14,7 @@ Create a .env file in the project folder and save your environment settings
 DATABASE_HOST = $dbHost
 DATABASE_PORT = $dbPort
 DATABASE_NAME = $dbName
+DEVICE_CRON = 0 * * * *
 ```
 Start the api
 ```
