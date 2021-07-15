@@ -18,6 +18,8 @@
   "homepage": "https://github.com/UCL-SightPlusPlus/SightPlusPlus-LocationServer#readme",
   "devDependencies": {
     "dotenv": "^10.0.0",
+    "eslint": "^7.30.0",
+    "eslint-config-google": "^0.14.0",
     "nodemon": "^2.0.9"
   },
   "dependencies": {

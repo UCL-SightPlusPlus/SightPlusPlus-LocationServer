@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(app) {
-  var controller = require('../controllers/recordController');
+  const controller = require('../controllers/recordController');
 
   app.route('/records')
     .get(controller.get_all_latest_records_using_floor)

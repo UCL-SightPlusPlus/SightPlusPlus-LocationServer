@@ -1,17 +1,17 @@
-require('dotenv').config() //load env vars in global var process.env
-var express = require('express'),
-  app = express(),
-  port = process.env.PORT || 3000,
-  mongoose = require('mongoose'),
-  Device = require('./api/models/deviceModel'), //created model loading here
-  Record = require('./api/models/recordModel');
+require('dotenv').config(); // load env vars in global var process.env
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+const mongoose = require('mongoose');
+const Device = require('./api/models/deviceModel'); // created model loading here
+const Record = require('./api/models/recordModel');
 
 // Start the scheduler
 var updater = require('./schedulers/deviceUpdater');
 // start socket server
-var socketServer = require('./socket/udpSocket');
+const socketServer = require('./socket/udpSocket');
 socketServer();
-  
+
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -19,14 +19,14 @@ mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_
 //Initialize scheduler
 updater.run_scheduler(process.env.DEVICE_CRON);
 
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-var recordRoutes = require('./api/routes/recordRoute'); //importing route
-var deviceRoutes = require('./api/routes/deviceRoute');
+const recordRoutes = require('./api/routes/recordRoute'); // importing route
+const deviceRoutes = require('./api/routes/deviceRoute');
 deviceRoutes(app);
-recordRoutes(app); //register the route
+recordRoutes(app); // register the route
 
 app.listen(port, () => {
-    console.log('Sight++ RESTful API server started on: ' + port);
+  console.log('Sight++ RESTful API server started on: ' + port);
 });
