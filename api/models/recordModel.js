@@ -1,27 +1,27 @@
 'use strict';
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 
-const recordSchema = new Schema({
+var recordSchema = new Schema({
   timestamp: {
     type: Date,
-    required: true,
+    required: true
   },
   deviceId: {
     type: String,
-    required: true,
+    required: true
   },
   targetId: {
     type: Number,
-    enum: [1, 2, 3],
-    required: true,
+    enum: [1,2,3],
+    required: true
   },
   queueing: {
-    type: Number,
+    type: Number
   },
   freeSeats: Number,
-  event: String,
-});
+  event: String
+})
 
 module.exports = mongoose.model('Records', recordSchema);
