@@ -3,7 +3,6 @@ module.exports = function(app) {
   var controller = require('../controllers/recordController');
 
   app.route('/records')
-    // .get(controller.list_all_records)
     .get(controller.get_all_latest_records_using_floor)
     .post(controller.create_a_record);
   
