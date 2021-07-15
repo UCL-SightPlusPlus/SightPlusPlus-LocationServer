@@ -1,14 +1,14 @@
-var axios = require('axios'),
-  assert = require('assert');
+const axios = require('axios');
+const assert = require('assert');
 
-var device = require('./deviceInstance');
+const device = require('./deviceInstance');
 
-var req = {
-    url: 'http://localhost:3000/devices/2',
-    method:'GET',
-}
+const req = {
+  url: 'http://localhost:3000/devices/2',
+  method: 'GET',
+};
 
 axios(req)
-.then(function(response) {
-    assert.equal(response.data.id, device.id);
-})
+    .then(function(response) {
+      assert.equal(response.data.id, device.id);
+    });
