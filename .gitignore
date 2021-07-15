@@ -103,8 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Rest test
+# rest test
 *.rest
-
-# ESLint 
-.eslintrc.js
