@@ -14,8 +14,8 @@ exports.list_all_records = function(req, res) {
 };
 
 exports.create_a_record = function(req, res) {
-  const newDecord = new Record(req.body);
-  newDecord.save(function(err, record) {
+  const newRecord = new Record(req.body);
+  newRecord.save(function(err, record) {
     if (err) {
       res.send(err);
     }
