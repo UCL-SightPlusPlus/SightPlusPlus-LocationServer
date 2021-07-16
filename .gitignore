@@ -106,8 +106,5 @@ dist
 # Rest test
 *.rest
 
-# ESLint 
-.eslintrc.js
-
 # IntelliJ folder
 .idea
