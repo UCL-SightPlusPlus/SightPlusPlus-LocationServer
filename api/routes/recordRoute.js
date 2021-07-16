@@ -3,10 +3,10 @@ module.exports = function(app) {
   const controller = require('../controllers/recordController');
 
   app.route('/records')
-    .get(controller.get_all_latest_records_using_floor)
-    .post(controller.create_a_record);
+    .get(controller.getAllLatestRecordsUsingFloor)
+    .post(controller.createRecord);
   
   app.route('/records/:targetId')
-    .get(controller.get_latest_record_using_floor_targetId);
+    .get(controller.getLatestRecordUsingFloorTargetId);
 
 };

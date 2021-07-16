@@ -108,3 +108,6 @@ dist
 
 # ESLint 
 .eslintrc.js
+
+# IntelliJ folder
+.idea

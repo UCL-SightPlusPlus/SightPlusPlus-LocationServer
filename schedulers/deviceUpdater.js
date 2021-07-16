@@ -1,20 +1,21 @@
 const cron = require('node-cron');
-var mongoose = require('mongoose'),
- Device = mongoose.model('Devices');
+const mongoose = require('mongoose');
+const Device = mongoose.model('Devices');
 
-exports.run_scheduler = function (deviceCron){
-  getDevices();
-  cron.schedule( deviceCron , () => {
-    getDevices();
-  })
+exports.run_scheduler = function(deviceCron) {
+  this.updateDeviceTable();
+  cron.schedule( deviceCron, () => {
+    this.updateDeviceTable();
+  });
 };
 
-function getDevices(){
+exports.updateDeviceTable = function getDevices() {
   Device.find({}, function(err, data) {
-    if (err)
-      console.error("Could not fetch devices.");
-    var stringData = JSON.stringify(data);
-    var jsonData = JSON.parse(stringData);
+    if (err) {
+      console.error('Could not fetch devices.');
+    }
+    const stringData = JSON.stringify(data);
+    const jsonData = JSON.parse(stringData);
     exports.deviceTable = jsonData;
   });
-}
+};
