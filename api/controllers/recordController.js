@@ -58,7 +58,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
   }
 };
 
-exports.getLatestRecordUsingFloorTargetId = async function(req, res) {
+exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
   // Returns all devices on the specified floor
   const devicesOnFloor = updater.deviceTable.filter(function(item) {
     return item.floor == req.query.floor;
@@ -66,10 +66,10 @@ exports.getLatestRecordUsingFloorTargetId = async function(req, res) {
 
   const records = [];
   // For each one of devices on the floor,
-  // it returns its latest record if the device's targetId is the one specified
+  // it returns its latest record if the device's recordType is the one specified
   try {
     await Promise.all(devicesOnFloor.map(async (device) => {
-      await Record.findOne({deviceId: device._id, targetId: req.params.targetId}, function(err, data) {
+      await Record.findOne({deviceId: device._id, recordType: req.params.recordType}, function(err, data) {
         if (err) {
           res.send(err);
         } else if (data != null) {

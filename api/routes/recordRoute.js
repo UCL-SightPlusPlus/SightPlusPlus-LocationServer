@@ -6,7 +6,7 @@ module.exports = function(app) {
     .get(controller.getAllLatestRecordsUsingFloor)
     .post(controller.createRecord);
   
-  app.route('/records/:targetId')
-    .get(controller.getLatestRecordUsingFloorTargetId);
+  app.route('/records/:recordType')
+    .get(controller.getLatestRecordUsingFloorRecordType);
 
 };
