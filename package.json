@@ -4,7 +4,7 @@
   "description": "UCL's Sight++ v3 project .",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "node ./unit-test/deviceControllerTest.js && node ./unit-test/recordControllerTest.js"
   },
   "repository": {
     "type": "git",
