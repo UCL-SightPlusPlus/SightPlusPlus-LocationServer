@@ -4,7 +4,7 @@
   "description": "UCL's Sight++ v3 project .",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",

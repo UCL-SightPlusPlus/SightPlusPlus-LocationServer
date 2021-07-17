@@ -37,8 +37,4 @@ jobs:
     - run: sudo docker run --name mongo -d -p 27017:27017 mongo
     - run: npm ci
     - run: npm run build --if-present
-    - name: Run API and tests
-      run: |
-        npm test &
-        sleep 2
-        kill -9 `lsof -i:3000 -t`
+    - run: npm test
