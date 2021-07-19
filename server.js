@@ -18,7 +18,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {useNewUrlParser: true, useUnifiedTopology: true});
 
 // Initialize scheduler
-updater.run_scheduler('0 * * * *');
+updater.run_scheduler(process.env.DEVICE_CRON);
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
