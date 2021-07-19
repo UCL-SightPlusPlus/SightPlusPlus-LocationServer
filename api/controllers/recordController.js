@@ -22,4 +22,3 @@ exports.create_a_record = function(req, res) {
     res.json(record);
   });
 };
-

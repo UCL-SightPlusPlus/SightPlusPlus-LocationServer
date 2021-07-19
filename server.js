@@ -22,6 +22,10 @@ const deviceRoutes = require('./api/routes/deviceRoute');
 deviceRoutes(app);
 recordRoutes(app); // register the route
 
-app.listen(port, () => {
+module.exports = function stop() {
+  server.close();
+};
+
+module.exports = app.listen(port, () => {
   console.log('Sight++ RESTful API server started on: ' + port);
 });
