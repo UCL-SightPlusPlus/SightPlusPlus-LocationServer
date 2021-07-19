@@ -22,9 +22,9 @@ exports.createDevice = function(req, res) {
     if (err) {
       res.send(err);
     }
+    updater.updateDeviceTable();
     res.json(device);
   });
-  updater.updateDeviceTable();
 };
 
 exports.readDevice = function(req, res) {
@@ -38,25 +38,25 @@ exports.readDevice = function(req, res) {
 
 
 exports.updateDevice = function(req, res) {
-  Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true},
+  Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true, useFindAndModify: false},
       function(err, device) {
         if (err) {
           res.send(err);
         }
+        updater.updateDeviceTable();
         res.json(device);
       });
-  updater.updateDeviceTable();
 };
 
 exports.deleteDevice = function(req, res) {
-  Device.remove({
+  Device.deleteOne({
     _id: req.params.deviceId,
   }, function(err, device) {
     if (err) {
       res.send(err);
     }
-    res.json({message: 'Device successfully deleted'});
     updater.updateDeviceTable();
+    res.json({message: 'Device successfully deleted'});
   });
 };
 
