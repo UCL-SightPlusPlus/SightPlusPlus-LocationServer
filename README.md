@@ -16,6 +16,7 @@ DATABASE_PORT = $dbPort
 DATABASE_NAME = $dbName
 UDP_SERVER_HOST = localhost
 UDP_PORT = 7979
+DEVICE_CRON = 0 * * * *
 ```
 Start the api
 ```

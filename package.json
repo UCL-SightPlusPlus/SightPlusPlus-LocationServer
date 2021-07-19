@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LydiaTsami/SightPlusPlus.git"
+    "url": "git+https://github.com/UCL-SightPlusPlus/SightPlusPlus-LocationServer.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LydiaTsami/SightPlusPlus/issues"
+    "url": "https://github.com/UCL-SightPlusPlus/SightPlusPlus-LocationServer/issues"
   },
-  "homepage": "https://github.com/LydiaTsami/SightPlusPlus#readme",
+  "homepage": "https://github.com/UCL-SightPlusPlus/SightPlusPlus-LocationServer#readme",
   "devDependencies": {
     "dotenv": "^10.0.0",
     "eslint": "^7.30.0",
@@ -28,6 +28,7 @@
     "chai-http": "^4.3.0",
     "dotnet": "^1.1.4",
     "express": "^4.17.1",
+    "node-cron": "^3.0.0",
     "mocha": "^9.0.2",
     "mongoose": "^5.13.2"
   }
