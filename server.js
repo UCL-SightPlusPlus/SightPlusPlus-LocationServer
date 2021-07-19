@@ -3,9 +3,12 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-const Device = require('./api/models/deviceModel'); // created model loading here
+// created model loading here
+const Device = require('./api/models/deviceModel'); 
 const Record = require('./api/models/recordModel');
 
+// Start the scheduler
+const updater = require('./schedulers/deviceUpdater');
 // start socket server
 const socketServer = require('./socket/udpSocket');
 socketServer();
@@ -13,6 +16,9 @@ socketServer();
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// Initialize scheduler
+updater.run_scheduler(process.env.DEVICE_CRON);
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());

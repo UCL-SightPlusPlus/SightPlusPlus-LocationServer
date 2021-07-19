@@ -4,8 +4,10 @@
 const mongoose = require('mongoose');
 const Device = mongoose.model('Devices');
 
+const updater = require('../../schedulers/deviceUpdater');
 
-exports.list_all_devices = function(req, res) {
+
+exports.listAllDevices = function(req, res) {
   Device.find({}, function(err, task) {
     if (err) {
       res.send(err);
@@ -14,17 +16,18 @@ exports.list_all_devices = function(req, res) {
   });
 };
 
-exports.create_a_device = function(req, res) {
+exports.createDevice = function(req, res) {
   const newDevice = new Device(req.body);
   newDevice.save(function(err, device) {
     if (err) {
       res.send(err);
     }
+    updater.updateDeviceTable();
     res.json(device);
   });
 };
 
-exports.read_a_device = function(req, res) {
+exports.readDevice = function(req, res) {
   Device.findById(req.params.deviceId, function(err, device) {
     if (err) {
       res.send(err);
@@ -34,23 +37,25 @@ exports.read_a_device = function(req, res) {
 };
 
 
-exports.update_a_device = function(req, res) {
-  Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true},
+exports.updateDevice = function(req, res) {
+  Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true, useFindAndModify: false},
       function(err, device) {
         if (err) {
           res.send(err);
         }
+        updater.updateDeviceTable();
         res.json(device);
       });
 };
 
-exports.delete_a_device = function(req, res) {
-  Device.remove({
+exports.deleteDevice = function(req, res) {
+  Device.deleteOne({
     _id: req.params.deviceId,
   }, function(err, device) {
     if (err) {
       res.send(err);
     }
+    updater.updateDeviceTable();
     res.json({message: 'Device successfully deleted'});
   });
 };

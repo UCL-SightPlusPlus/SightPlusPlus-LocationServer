@@ -105,3 +105,6 @@ dist
 
 # Rest test
 *.rest
+
+# IntelliJ folder
+.idea
