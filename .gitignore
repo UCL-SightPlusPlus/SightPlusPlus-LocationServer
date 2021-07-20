@@ -107,4 +107,4 @@ dist
 *.rest
 
 # IntelliJ folder
-.idea
+.idea/
