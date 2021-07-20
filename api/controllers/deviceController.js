@@ -20,6 +20,7 @@ exports.createDevice = function(req, res) {
   const newDevice = new Device(req.body);
   newDevice.save(function(err, device) {
     if (err) {
+      res.status(400);
       res.send(err);
     }
     updater.updateDeviceTable();
@@ -32,19 +33,33 @@ exports.readDevice = function(req, res) {
     if (err) {
       res.send(err);
     }
-    res.json(device);
+    else if(device == null){
+      res.status(404).json({message: 'Device ' + req.params.deviceId + ' does not exist.'});
+    }
+    else{
+      res.json(device);
+    }
   });
 };
 
 
 exports.updateDevice = function(req, res) {
+  //Cannot change a device's id.
+  delete req.body._id;
+
   Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true, useFindAndModify: false},
       function(err, device) {
         if (err) {
+          res.status(400)
           res.send(err);
         }
-        updater.updateDeviceTable();
-        res.json(device);
+        else if(device == null){
+          res.status('404').json({message: 'Device Id not found'});
+        }
+        else{
+          updater.updateDeviceTable();
+          res.json(device);
+        }
       });
 };
 
@@ -53,10 +68,16 @@ exports.deleteDevice = function(req, res) {
     _id: req.params.deviceId,
   }, function(err, device) {
     if (err) {
+      res.status(400)
       res.send(err);
     }
-    updater.updateDeviceTable();
-    res.json({message: 'Device successfully deleted'});
+    else if(device.deletedCount == 0){
+      res.status(404).json({message: 'Device ' + req.params.deviceId + ' does not exist.'})
+    }
+    else{
+      updater.updateDeviceTable();
+      res.json({message: 'Device successfully deleted'});
+    }
   });
 };
 
