@@ -22,6 +22,9 @@ describe('Record API', () => {
     };
 
     chai.request(server)
+      .delete('/devices' + id);
+
+    chai.request(server)
       .post('/devices')
       .set('content-type', 'application/json')
       .send(device)
