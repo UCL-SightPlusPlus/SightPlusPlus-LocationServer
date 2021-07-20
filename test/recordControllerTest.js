@@ -22,7 +22,7 @@ describe('Record API', () => {
     };
 
     chai.request(server)
-      .delete('/devices' + id);
+      .delete('/devices/' + id);
 
     chai.request(server)
       .post('/devices')
@@ -33,7 +33,7 @@ describe('Record API', () => {
   });
   after(function () {
     chai.request(server)
-      .delete('/devices' + id);
+      .delete('/devices/' + id);
   });
   // POST
   describe('Test POST route /records', () => {
