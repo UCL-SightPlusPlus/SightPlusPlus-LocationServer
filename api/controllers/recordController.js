@@ -5,20 +5,11 @@ const Record = mongoose.model('Records');
 
 const updater = require('../../schedulers/deviceUpdater');
 
-
-exports.listAllRecords = function(req, res) {
-  Record.find({}, function(err, task) {
-    if (err) {
-      res.send(err);
-    }
-    res.json(task);
-  });
-};
-
 exports.createRecord = function(req, res) {
   const newRecord = new Record(req.body);
   newRecord.save(function(err, record) {
     if (err) {
+      res.status(400);
       res.send(err);
     }
     res.json(record);
@@ -30,6 +21,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
   if (req.query.floor == null) {
     Record.find({}, function(err, task) {
       if (err) {
+        res.status(400);
         res.send(err);
       }
       res.json(task);
@@ -46,6 +38,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
       await Promise.all(devicesOnFloor.map(async (device) => {
         await Record.findOne({deviceId: device._id}, function(err, data) {
           if (err) {
+            res.status(400);
             res.send(err);
           }
           records.push(data);
@@ -53,6 +46,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
       }));
       res.json(records);
     } catch (err) {
+      res.status(400);
       res.send(err);
     }
   }
@@ -71,6 +65,7 @@ exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
     await Promise.all(devicesOnFloor.map(async (device) => {
       await Record.findOne({deviceId: device._id, recordType: req.params.recordType}, function(err, data) {
         if (err) {
+          res.status(400);
           res.send(err);
         } else if (data != null) {
           records.push(data);
@@ -79,6 +74,7 @@ exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
     }));
     res.json(records);
   } catch (err) {
+    res.status(400);
     res.send(err);
   }
 };
