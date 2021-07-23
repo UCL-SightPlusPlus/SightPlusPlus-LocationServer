@@ -12,7 +12,7 @@ const recordSchema = new Schema({
     type: String,
     required: true,
   },
-  recordType: {
+  targetId: {
     type: Number,
     enum: [1, 2, 3],
     required: true,
