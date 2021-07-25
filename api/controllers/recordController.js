@@ -29,7 +29,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
   } else {
     // Return all devices on the specified floor
     const devicesOnFloor = updater.deviceTable.filter(function(item) {
-      return item.floor == req.query.floor;
+      return item.floor == req.query.floor && (item.deviceType == 'camera');
     });
 
     const records = [];
@@ -82,10 +82,10 @@ exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
 exports.getLatestRecordByBeacon = (req, res) => {
   // find the beacon with deviceId
   const beacon = updater.deviceTable.find(device => device._id == req.params.deviceId);
-  // debug: console.log(beacon);
+  // console.log(beacon);
   if (beacon) {
     if (req.query.lastFloor) {
-      console.log(req.query.lastFloor);
+      // console.log(req.query.lastFloor);
       const sentences = [];
       // 2 cases: on the same floor or on a different floor
       if (beacon.floor == req.query.lastFloor) {
@@ -94,9 +94,9 @@ exports.getLatestRecordByBeacon = (req, res) => {
         const deviceInLocation = updater.deviceTable.filter(device => {
           return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
         });
-        console.log(deviceInLocation);
+        // console.log(deviceInLocation);
         sentences.push(`You are in ${beacon.deviceLocation}.`);
-        console.log(sentences);
+        // console.log(sentences);
         // get latest record of each device
         Promise.all(deviceInLocation.map(async (device) => {
           await Record.findOne({deviceId: device._id}, (err, record) => {
@@ -104,7 +104,7 @@ exports.getLatestRecordByBeacon = (req, res) => {
               res.status(400);
               res.send(err);
             } else {
-              console.log(record);
+              // console.log(record);
               sentences.push(createSentenceUsingRecord(record));
             }
           }).sort('-timestamp');
