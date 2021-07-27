@@ -35,26 +35,46 @@ describe('Record API', () => {
     ];
 
     chai.request(server)
-      .delete('/devices/' + sensorId);
+      .delete('/devices/' + sensorId)
+      .end((err, response) => {
+        console.log(`Error: ${err}`);
+      });
 
     chai.request(server)
-      .delete('/devices/' + cameraId);
+      .delete('/devices/' + cameraId)
+      .end((err, response) => {
+        console.log(`Error: ${err}`);
+      });
 
     chai.request(server)
       .post('/devices')
       .set('content-type', 'application/json')
-      .send(devices[0]);
+      .send(devices[0])
+      .end((err, response) => {
+        console.log(`Error: ${err}`);
+        console.log(`Response: ${response.body.toString()}`);
+        chai.request(server)
+          .post('/devices')
+          .set('content-type', 'application/json')
+          .send(devices[1])
+          .end((err, response) => {
+            console.log(`Error: ${err}`);
+            console.log(`Response: ${response.body.toString()}`);
+          });
+      });
 
-    chai.request(server)
-      .post('/devices')
-      .set('content-type', 'application/json')
-      .send(devices[1]);
   });
   after(function () {
     chai.request(server)
-      .delete('/devices/' + sensorId);
+      .delete('/devices/' + sensorId)
+      .end((err, response) => {
+        console.log(`Error: ${err}`);
+      });
     chai.request(server)
-      .delete('/devices/' + cameraId);
+      .delete('/devices/' + cameraId)
+      .end((err, response) => {
+        console.log(`Error: ${err}`);
+      });
   });
   // POST
   describe('Test POST route /records', () => {
@@ -102,6 +122,7 @@ describe('Record API', () => {
           .get(`/records/${sensorId}?lastFloor=999`)
           .end((err, response) => {
             console.log(`Error: ${err}`);
+            console.log(`Response: ${response.body}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('floor').eq(floor);
