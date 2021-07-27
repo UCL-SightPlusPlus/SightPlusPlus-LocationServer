@@ -38,4 +38,4 @@ jobs:
     - run: sudo docker run --name mongo -d -p 27017:27017 mongo
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+    - run: npm test --abort-on-uncaught-exception
