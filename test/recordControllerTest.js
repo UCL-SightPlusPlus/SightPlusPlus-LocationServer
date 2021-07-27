@@ -8,7 +8,7 @@ chai.should();
 chai.use(chaiHttp);
 const time = new Date().toISOString();
 const sensorId = '999';
-const cameraId = '1';
+const cameraId = '996';
 
 describe('Record API', () => {
   before(function () {
@@ -39,14 +39,15 @@ describe('Record API', () => {
     chai.request(server)
       .delete('/devices/' + cameraId);
 
-    devices.forEach(device => {
-      chai.request(server)
+    chai.request(server)
       .post('/devices')
       .set('content-type', 'application/json')
-      .send(device)
-      .end((err, response) => {
-      });
-    });
+      .send(devices[0]);
+
+    chai.request(server)
+      .post('/devices')
+      .set('content-type', 'application/json')
+      .send(devices[1]);
   });
   after(function () {
     chai.request(server)
@@ -60,7 +61,7 @@ describe('Record API', () => {
       const record = {
         'timestamp': time,
         'deviceId': cameraId,
-        'targetId': 1,
+        'recordType': 1,
         'queueing': 7,
       };
       chai.request(server)

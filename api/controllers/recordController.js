@@ -41,7 +41,9 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
             res.status(400);
             res.send(err);
           }
-          records.push(data);
+          if(data != null) {
+            records.push(data);
+          }
         }).sort('-timestamp');
       }));
       res.json(records);
@@ -154,8 +156,8 @@ function createSentenceUsingRecord(record) {
     'freeSeats': 2,
     'event': 3,
   };
-  if (record) {
-    if (record.targetId == targetId.queueing) {
+  if (record != null) {
+    if (record.recordType == targetId.queueing) {
       sentence = `${record.queueing} people in the queue.`;
     } else if (record.targetId == targetId.freeSeats) {
       sentence = `${record.freeSeats} seats is available.`;
