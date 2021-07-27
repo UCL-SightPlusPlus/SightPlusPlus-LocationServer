@@ -96,6 +96,7 @@ describe('Record API', () => {
       chai.request(server)
         .get('/records?floor=999')
         .end((err, response) => {
+          console.log(`Error: ${err}`);
           response.should.have.status(200);
           response.body.should.be.a('array');
           response.body[0].should.have.property('timestamp').eq(time);
@@ -125,8 +126,9 @@ describe('Record API', () => {
     it('It should return latest records of location', (done) => {
       const sentence = 'You are in Main entrance.7 people in the queue.';
       chai.request(server)
-          .get('/records/999?lastFloor=999')
+          .get(`/records/${sensorId}?lastFloor=999`)
           .end((err, response) => {
+            console.log(`Error: ${err}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('floor').eq(currentFloor);
@@ -137,8 +139,9 @@ describe('Record API', () => {
     it('It should return latest records of new floor', (done) => {
       const sentence = '999 floor has Main entrance.In Main entrance 7 people in the queue.';
       chai.request(server)
-          .get('/records/999?lastFloor=1')
+          .get(`/records/${sensorId}?lastFloor=1`)
           .end((err, response) => {
+            console.log(`Error: ${err}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('floor').eq(currentFloor);
