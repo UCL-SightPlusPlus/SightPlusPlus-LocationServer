@@ -35,32 +35,12 @@ describe('Record API', () => {
     ];
 
     chai.request(server)
-      .delete('/devices/' + sensorId)
-      .end((err, response) => {
-        console.log(`Error: ${err}`);
-      });
-
-    chai.request(server)
-      .delete('/devices/' + cameraId)
-      .end((err, response) => {
-        console.log(`Error: ${err}`);
-      });
-
-    chai.request(server)
       .post('/devices')
       .set('content-type', 'application/json')
       .send(devices[0])
       .end((err, response) => {
         console.log(`Error: ${err}`);
         console.log(`Response: ${response.body.toString()}`);
-        chai.request(server)
-          .post('/devices')
-          .set('content-type', 'application/json')
-          .send(devices[1])
-          .end((err, response) => {
-            console.log(`Error: ${err}`);
-            console.log(`Response: ${response.body.toString()}`);
-          });
       });
 
   });
@@ -116,6 +96,24 @@ describe('Record API', () => {
   });
 
   describe('Test GET /records/:deviceId', () => {
+    before( function (){
+      chai.request(server)
+        .post('/devices')
+        .set('content-type', 'application/json')
+        .send({
+          '_id': cameraId,
+          'deviceType': 'camera',
+          'deviceLocation': 'Main entrance',
+          'site': 'GOSH DRIVE',
+          'isIndoor': true,
+          'floor': floor,
+          'maxOccupancy': 50,
+        })
+        .end((err, response) => {
+          console.log(`Error: ${err}`);
+          console.log(`Response: ${response.body.toString()}`);
+        });
+    })
     it('It should return latest records of new room', (done) => {
       const sentence = 'You are in Main entrance.7 people in the queue.';
       chai.request(server)
