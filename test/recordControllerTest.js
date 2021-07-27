@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 const time = new Date().toISOString();
 const sensorId = '999';
 const cameraId = '996';
+const floor = 999;
 
 describe('Record API', () => {
   before(function () {
@@ -19,7 +20,7 @@ describe('Record API', () => {
         'deviceLocation': 'Main entrance',
         'site': 'GOSH DRIVE',
         'isIndoor': true,
-        'floor': 999,
+        'floor': floor,
         'maxOccupancy': 50,
       },
       {
@@ -28,7 +29,7 @@ describe('Record API', () => {
         'deviceLocation': 'Main entrance',
         'site': 'GOSH DRIVE',
         'isIndoor': true,
-        'floor': 999,
+        'floor': floor,
         'maxOccupancy': 50,
       },
     ];
@@ -85,45 +86,17 @@ describe('Record API', () => {
       chai.request(server)
           .get('/records')
           .end((err, response) => {
+            console.log(response.body);
             response.should.have.status(200);
             response.body.should.be.a('array');
             response.body.length.should.not.be.eq(0);
             done();
           });
     });
-
-    it('It should return latest records of a floor', (done) => {
-      chai.request(server)
-        .get('/records?floor=999')
-        .end((err, response) => {
-          console.log(`Error: ${err}`);
-          response.should.have.status(200);
-          response.body.should.be.a('array');
-          response.body[0].should.have.property('timestamp').eq(time);
-          response.body[0].should.have.property('deviceId').eq(cameraId);
-          done();
-        });
-    });
   });
 
-  // describe("Test GET /records/:recordType", () => {
-  //   it('It should return latest records of a floor of a specific recordType', (done) => {
-  //     chai.request(server)
-  //       .get('/records/1?floor=999')
-  //       .end((err, response) => {
-  //         response.should.have.status(200);
-  //         response.body.should.be.a('array');
-  //         response.body.length.should.be.eq(1);
-  //         response.body[0].should.have.property('timestamp').eq(time);
-  //         response.body[0].should.have.property('deviceId').eq(id);
-  //         done();
-  //       });
-  //   });
-  // });
-
   describe('Test GET /records/:deviceId', () => {
-    const currentFloor = 999;
-    it('It should return latest records of location', (done) => {
+    it('It should return latest records of new room', (done) => {
       const sentence = 'You are in Main entrance.7 people in the queue.';
       chai.request(server)
           .get(`/records/${sensorId}?lastFloor=999`)
@@ -131,7 +104,7 @@ describe('Record API', () => {
             console.log(`Error: ${err}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
-            response.body.should.have.property('floor').eq(currentFloor);
+            response.body.should.have.property('floor').eq(floor);
             response.body.should.have.property('sentence').eq(sentence);
             done();
           });
@@ -144,7 +117,7 @@ describe('Record API', () => {
             console.log(`Error: ${err}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
-            response.body.should.have.property('floor').eq(currentFloor);
+            response.body.should.have.property('floor').eq(floor);
             response.body.should.have.property('sentence').eq(sentence);
             done();
           });
