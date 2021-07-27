@@ -119,8 +119,6 @@ describe('Record API', () => {
       chai.request(server)
           .get(`/records/${sensorId}?lastFloor=999`)
           .end((err, response) => {
-            console.log(`Error: ${err}`);
-            console.log(`Response: ${response.body}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('floor').eq(floor);
@@ -133,7 +131,6 @@ describe('Record API', () => {
       chai.request(server)
           .get(`/records/${sensorId}?lastFloor=1`)
           .end((err, response) => {
-            console.log(`Error: ${err}`);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('floor').eq(floor);
