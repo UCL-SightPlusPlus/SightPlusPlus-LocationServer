@@ -49,12 +49,10 @@ describe('Record API', () => {
     chai.request(server)
       .delete('/devices/' + sensorId)
       .end((err, response) => {
-        console.log(`Error: ${err}`);
       });
     chai.request(server)
       .delete('/devices/' + cameraId)
       .end((err, response) => {
-        console.log(`Error: ${err}`);
       });
   });
   // POST
@@ -71,7 +69,6 @@ describe('Record API', () => {
           .set('content-type', 'application/json')
           .send(record)
           .end((err, response) => {
-            console.log(err);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('deviceId').eq(cameraId);
@@ -87,7 +84,6 @@ describe('Record API', () => {
       chai.request(server)
           .get('/records')
           .end((err, response) => {
-            console.log(response.body);
             response.should.have.status(200);
             response.body.should.be.a('array');
             response.body.length.should.not.be.eq(0);
@@ -116,7 +112,7 @@ describe('Record API', () => {
           });
       });
     })
-    
+
     it('It should return latest records of new room', (done) => {
       const sentence = 'You are in Main entrance.7 people in the queue.';
       chai.request(server)
