@@ -6,7 +6,8 @@ module.exports = function(app) {
     .get(controller.getAllLatestRecordsUsingFloor)
     .post(controller.createRecord);
   
-  app.route('/records/:recordType')
-    .get(controller.getLatestRecordUsingFloorRecordType);
-
+  // app.route('/records/:recordType')
+  //   .get(controller.getLatestRecordUsingFloorRecordType);
+  app.route('/records/:deviceId')
+    .get(controller.getLatestRecordByBeacon);
 };
