@@ -4,6 +4,7 @@
   "description": "UCL's Sight++ v3 project .",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "mocha --exit"
   },
   "repository": {
@@ -20,7 +21,7 @@
     "dotenv": "^10.0.0",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
-    "nodemon": "^2.0.9"
+    "nodemon": "^2.0.12"
   },
   "dependencies": {
     "axios": "^0.21.1",
