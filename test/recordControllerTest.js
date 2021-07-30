@@ -137,5 +137,17 @@ describe('Record API', () => {
             done();
           });
     });
+    it('It should return latest records of the floor beacon is on', (done) => {
+      const sentence = '999 floor has Main entrance.In Main entrance 7 people in the queue.';
+      chai.request(server)
+          .get(`/records/${sensorId}`)
+          .end((err, response) => {
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('floor').eq(floor);
+            response.body.should.have.property('sentence').eq(sentence);
+            done();
+          });
+    });
   });
 });
