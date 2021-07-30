@@ -82,40 +82,47 @@ exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
 };
 
 exports.getLatestRecordByBeacon = (req, res) => {
-  // find the beacon with deviceId
-  const beacon = updater.deviceTable.find(device => device._id == req.params.deviceId);
+  console.log(req.query.lastFloor);
+  let response = recordFinder(req.params.deviceId, req.query.lastFloor);
+  console.log(response);
+  // res.status(status.status).json(response.message);
+};
+
+function recordFinder(beaconId, lastFloor){
+  console.log(lastFloor);
+  console.log(beaconId);
+  const beacon = updater.deviceTable.find(device => device._id == beaconId);
   // console.log(beacon);
   if (beacon) {
-    if (req.query.lastFloor) {
+    console.log(lastFloor)
+    if (lastFloor) {
       // console.log(req.query.lastFloor);
       const sentences = [];
       // 2 cases: on the same floor or on a different floor
-      if (beacon.floor == req.query.lastFloor) {
+      if (beacon.floor == lastFloor) {
         // Return the cameras in the same room as beacon
         console.log('On last floor');
         const deviceInLocation = updater.deviceTable.filter(device => {
           return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
         });
         // console.log(deviceInLocation);
-        sentences.push(`You are in ${beacon.deviceLocation}.`);
+        sentences.push(`You are now on the ${beacon.deviceLocation}.`);
         // console.log(sentences);
         // get latest record of each device
         Promise.all(deviceInLocation.map(async (device) => {
           await Record.findOne({deviceId: device._id}, (err, record) => {
             if (err) {
-              res.status(400);
-              res.send(err);
+              return {'status' :400, 'message': err};
             } else {
               // console.log(record);
               sentences.push(createSentenceUsingRecord(record));
             }
           }).sort('-timestamp');
         })).then(() => {
-          res.status(200);
-          res.send({'floor': beacon.floor, 'sentence': sentences.join('')});
+          const response = {'floor': beacon.floor, 'sentence': sentences.join('')};
+          return {'status': 200, 'message': response};
         }).catch((err) => {
-          res.status(400);
-          res.send(err);
+          return [400, {'message': err}];
         });
       } else {
         console.log('Not on last floor');
@@ -130,23 +137,22 @@ exports.getLatestRecordByBeacon = (req, res) => {
               sentences.push(createSentenceUsingRecord(record));
             });
           })).then(() => {
-            res.status(200);
-            res.send({'floor': beacon.floor, 'sentence': sentences.join('')});
+            const response = {'floor': beacon.floor, 'sentence': sentences.join('')};
+            return {'status': 200, 'message': response};;
           }).catch((err) => {
-            res.status(400);
-            res.send(err);
+            return {'status': 400, 'message': err};
           });
         });
       }
     } else {
-      res.status(400);
-      res.send({'message': 'Last floor is not passed'});
+      const errResponse = {'message': 'Last floor is not passed'};
+      return {'status': 400, 'message': errResponse};
     }
   } else {
-    res.status(404);
-    res.send({'message': 'Beacon not found'});
+    const errResponse = {'message': 'Beacon not found'};
+    return {'status': 400, 'message': errResponse};
   }
-};
+}
 
 // eslint-disable-next-line require-jsdoc
 function createSentenceUsingRecord(record) {
