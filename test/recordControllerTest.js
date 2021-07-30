@@ -114,7 +114,7 @@ describe('Record API', () => {
     })
 
     it('It should return latest records of new room', (done) => {
-      const sentence = 'You are in Main entrance.7 people in the queue.';
+      const sentence = 'You are now at the Main entrance area. there are 7 people in the queue. ';
       chai.request(server)
           .get(`/records/${sensorId}?lastFloor=999`)
           .end((err, response) => {
@@ -126,7 +126,7 @@ describe('Record API', () => {
           });
     });
     it('It should return latest records of new floor', (done) => {
-      const sentence = '999 floor has Main entrance.In Main entrance 7 people in the queue.';
+      const sentence = 'You are now on the 999th floor. On this floor you can find the Main entrance area. In the Main entrance area there are 7 people in the queue. ';
       chai.request(server)
           .get(`/records/${sensorId}?lastFloor=1`)
           .end((err, response) => {

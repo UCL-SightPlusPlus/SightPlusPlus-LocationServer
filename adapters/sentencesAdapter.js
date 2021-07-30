@@ -17,7 +17,7 @@ exports.automaticMessage = async function(beaconId, lastFloor) {
         const deviceInLocation = updater.deviceTable.filter(device => {
           return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
         });
-        sentences.push(`You are now on the ${beacon.deviceLocation} area. `);
+        sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
         // get latest record of each device
         Promise.all(deviceInLocation.map(async (device) => {
           await Record.findOne({deviceId: device._id}, (err, record) => {
@@ -38,8 +38,10 @@ exports.automaticMessage = async function(beaconId, lastFloor) {
         console.log('Not on last floor');
         const deviceOnFloor = updater.deviceTable.filter(device => device.floor == beacon.floor && (device.deviceType == 'camera'));
         const locations = [...new Set(deviceOnFloor.map(device => device.deviceLocation))];
-        let sentence = `You are now one the ${ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
-        sentence = sentence.substring(0, sentence.lastIndexOf(',')) + `and` + sentence.substring(sentence.lastIndexOf(',')+1,sentence.length);
+        let sentence = `You are now on the ${ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
+        if(locations.length > 1){
+          sentence.substring(0, sentence.lastIndexOf(',')) + `and` + sentence.substring(sentence.lastIndexOf(',')+1,sentence.length);
+        }
         sentences.push(sentence);
         locations.map(loc => {
           let deviceInLocation = deviceOnFloor.filter(device => device.deviceLocation == loc);
