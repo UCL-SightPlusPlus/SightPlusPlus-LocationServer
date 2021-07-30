@@ -25,8 +25,10 @@ app.use(express.json());
 
 const recordRoutes = require('./api/routes/recordRoute'); // importing route
 const deviceRoutes = require('./api/routes/deviceRoute');
+const questionRoutes = require('./api/routes/questionRoute');
 deviceRoutes(app);
 recordRoutes(app); // register the route
+questionRoutes(app);
 
 module.exports = function stop() {
   server.close();
