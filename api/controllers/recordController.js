@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Record = mongoose.model('Records');
 
 const updater = require('../../schedulers/deviceUpdater');
-const sentenceAdapter = require('../../adapters/sentencesAdapter')
+const sentenceAdapter = require('../../adapters/sentenceAdapter')
 
 exports.createRecord = function(req, res) {
   const newRecord = new Record(req.body);
@@ -85,5 +85,4 @@ exports.getLatestRecordUsingFloorRecordType = async function(req, res) {
 exports.getLatestRecordByBeacon = (req, res) => {
   sentenceAdapter.automaticMessage(req.params.deviceId, req.query.lastFloor).then( response =>
     res.status(response.status).json(response.message));
-
 };
