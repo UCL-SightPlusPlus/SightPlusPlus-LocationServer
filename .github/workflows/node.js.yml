@@ -22,10 +22,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create env file
-      with:
-        KB_HOST: ${{secrets.KB_HOST}}
-        KB_ENDPOINT_KEY: ${{secrets.KB_ENDPOINT_KEY}}
-        KB_ID: ${{secrets.KB_ID}}
       run: |
         touch .env
         echo DATABASE_HOST=localhost >> .env
@@ -37,6 +33,10 @@ jobs:
         echo "KB_HOST=$KB_HOST" >> .env
         echo "KB_ENDPOINT_KEY=$KB_ENDPOINT_KEY" >> .env
         echo "KB_ID=$KB_ID" >> .env
+      with:
+        KB_HOST: ${{secrets.KB_HOST}}
+        KB_ENDPOINT_KEY: ${{secrets.KB_ENDPOINT_KEY}}
+        KB_ID: ${{secrets.KB_ID}}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
