@@ -9,6 +9,8 @@ const Record = require('./api/models/recordModel');
 
 // Start the scheduler
 const updater = require('./schedulers/deviceUpdater');
+
+const qnaAdapter = require('./adapters/qnaMakerAdapter');
 // start socket server
 const socketServer = require('./socket/udpSocket');
 socketServer();
@@ -30,9 +32,7 @@ deviceRoutes(app);
 recordRoutes(app); // register the route
 questionRoutes(app);
 
-module.exports = function stop() {
-  server.close();
-};
+qnaAdapter.run();
 
 module.exports = app.listen(port, () => {
   console.log('Sight++ RESTful API server started on: ' + port);

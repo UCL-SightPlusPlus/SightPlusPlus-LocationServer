@@ -5,7 +5,7 @@ module.exports = () => {
   const udpServer = dgram.createSocket('udp4');
 
   udpServer.on('listening', () => {
-    console.log(`udp server listening on ${process.env.UDP_PORT}.`);
+    console.log(`UDP server listening on ${process.env.UDP_PORT}.`);
   });
 
   udpServer.on('message', (msg, rinfo) => {
