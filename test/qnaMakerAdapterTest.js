@@ -9,7 +9,7 @@ describe('QnA Maker Adapter', () => {
         // console.log(sentence1);
         sentence.should.be.a('object');
         sentence.should.have.property('answers');
-        sentence.answers[0].should.have.property('answer').eq('The location is open everyday at 9am to 6pm');
+        sentence.answers[0].should.have.property('answer').eq('The location is open everyday from 9am to 6pm');
         done();
       });
     });
