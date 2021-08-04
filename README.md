@@ -17,9 +17,9 @@ DATABASE_NAME = $dbName
 UDP_SERVER_HOST = localhost
 UDP_PORT = 7979
 DEVICE_CRON = 0 * * * *
-KB_HOST=https://gosh-bot.azurewebsites.net
-KB_ENDPOINT_KEY=15a397e6-5775-4c42-8562-a040fbb090a9
-KB_ID=06e05c24-ff93-4475-af98-19b4208f0f96
+KB_HOST= $knowledgebase_host
+KB_ENDPOINT_KEY= $$knowledgebase_key
+KB_ID = $knowledgebase_id
 ```
 
 Set the `KB_ENDPOINT_KEY` and `KB_ID` variables to your
