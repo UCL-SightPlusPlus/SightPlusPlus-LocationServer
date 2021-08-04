@@ -24,7 +24,7 @@ exports.automaticMessage = async function(beaconId, lastFloor) {
             if (err) {
               resolve({'status': 400, 'message': err});
             } else {
-              sentences.push(createSentenceUsingRecord(record));
+              sentences.push(this.createSentence(record));
             }
           }).sort('-timestamp');
         })).then(() => {
@@ -38,7 +38,7 @@ exports.automaticMessage = async function(beaconId, lastFloor) {
         console.log('Not on last floor');
         const deviceOnFloor = updater.deviceTable.filter((device) => device.floor == beacon.floor && (device.deviceType == 'camera'));
         const locations = [...new Set(deviceOnFloor.map((device) => device.deviceLocation))];
-        const sentence = `You are now on the ${ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
+        const sentence = `You are now on the ${this.ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
         if (locations.length > 1) {
           sentence.substring(0, sentence.lastIndexOf(',')) + `and` + sentence.substring(sentence.lastIndexOf(',')+1, sentence.length);
         }
@@ -49,7 +49,7 @@ exports.automaticMessage = async function(beaconId, lastFloor) {
             await Record.findOne({deviceId: device._id}, (err, record) => {
               if (record != null) {
                 sentences.push(`In the ${loc} area `);
-                sentences.push(createSentenceUsingRecord(record));
+                sentences.push(this.createSentence(record));
               }
             });
           })).then(() => {
@@ -74,35 +74,30 @@ exports.questionMessage = async function(beaconId, lastFloor, recordType) {
     // console.log(beacon);
     if (beacon) {
       const sentences = [];
-      // 2 cases: on the same floor or on a different floor
-      if (lastFloor) {
-        // Return the cameras in the same room as beacon
-        console.log('On last floor');
-        const deviceInLocation = updater.deviceTable.filter((device) => {
-          return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
-        });
-        sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
-        // get latest record of each device
-        Promise.all(deviceInLocation.map(async (device) => {
-          await Record.findOne({deviceId: device._id, recordType: recordType}, (err, record) => {
-            if (err) {
-              resolve({'status': 400, 'message': err});
-            } else {
-              record != null ? sentences.push(createSentenceUsingRecord(record)) : null;
-            }
-          }).sort('-timestamp');
-        })).then(() => {
-          if (sentences.length < 2 && recordType == 1) {
-            sentences.push('There is no information about a queue in this area.');
-          } else if (sentences.length < 2 && recordType == 2) {
-            sentences.push('There is no information about a seating space in this area.');
+      const deviceInLocation = updater.deviceTable.filter((device) => {
+        return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
+      });
+      sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
+      // get latest record of each device
+      Promise.all(deviceInLocation.map(async (device) => {
+        await Record.findOne({deviceId: device._id, recordType: recordType}, (err, record) => {
+          if (err) {
+            resolve({'status': 400, 'message': err});
+          } else {
+            record != null ? sentences.push(this.createSentence(record)) : null;
           }
-          const response = {'status': 200, 'message': {'floor': beacon.floor, 'sentence': sentences.join('')}};
-          resolve(response);
-        }).catch((err) => {
-          resolve({'status': 400, 'message': err});
-        });
-      }
+        }).sort('-timestamp');
+      })).then(() => {
+        if (sentences.length < 2 && recordType == 1) {
+          sentences.push('There is no information about a queue in this area.');
+        } else if (sentences.length < 2 && recordType == 2) {
+          sentences.push('There is no information about a seating space in this area.');
+        }
+        const response = {'status': 200, 'message': {'floor': beacon.floor, 'sentence': sentences.join('')}};
+        resolve(response);
+      }).catch((err) => {
+        resolve({'status': 400, 'message': err});
+      });
     } else {
       const errResponse = {'message': 'Beacon not found'};
       resolve( {'status': 400, 'message': errResponse});
@@ -111,7 +106,7 @@ exports.questionMessage = async function(beaconId, lastFloor, recordType) {
 };
 
 // eslint-disable-next-line require-jsdoc
-function createSentenceUsingRecord(record) {
+exports.createSentence = function createSentenceUsingRecord(record) {
   let sentence = '';
   const targetId = {
     'queueing': 1,
@@ -135,7 +130,7 @@ function createSentenceUsingRecord(record) {
 };
 
 // eslint-disable-next-line require-jsdoc
-function ordinalSuffixOf(i) {
+exports.ordinalSuffixOf = function ordinalSuffixOf(i) {
   const j = i % 10;
   const k = i % 100;
   if (j == 1 && k != 11) {
@@ -148,4 +143,4 @@ function ordinalSuffixOf(i) {
     return i + 'rd';
   }
   return i + 'th';
-}
+};

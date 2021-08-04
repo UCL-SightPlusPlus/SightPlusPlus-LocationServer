@@ -1,8 +1,6 @@
 const server = require('../server.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { response } = require('express');
-const { expect } = require('chai');
 
 chai.should();
 chai.use(chaiHttp);
@@ -12,7 +10,7 @@ const cameraId = '996';
 const floor = 999;
 
 describe('Record API', () => {
-  before(function () {
+  before(function() {
     const devices = [
       {
         '_id': sensorId,
@@ -36,24 +34,23 @@ describe('Record API', () => {
 
     return new Promise((resolve) =>{
       chai.request(server)
-        .post('/devices')
-        .set('content-type', 'application/json')
-        .send(devices[0])
-        .end((err, response) => {
-          resolve();
-        });
+          .post('/devices')
+          .set('content-type', 'application/json')
+          .send(devices[0])
+          .end((err, response) => {
+            resolve();
+          });
     });
-
   });
-  after(function () {
+  after(function() {
     chai.request(server)
-      .delete('/devices/' + sensorId)
-      .end((err, response) => {
-      });
+        .delete('/devices/' + sensorId)
+        .end((err, response) => {
+        });
     chai.request(server)
-      .delete('/devices/' + cameraId)
-      .end((err, response) => {
-      });
+        .delete('/devices/' + cameraId)
+        .end((err, response) => {
+        });
   });
   // POST
   describe('Test POST route /records', () => {
@@ -93,25 +90,25 @@ describe('Record API', () => {
   });
 
   describe('Test GET /records/:deviceId', () => {
-    before( function (){
+    before( function() {
       return new Promise((resolve) =>{
         chai.request(server)
-          .post('/devices')
-          .set('content-type', 'application/json')
-          .send({
-            '_id': cameraId,
-            'deviceType': 'camera',
-            'deviceLocation': 'Main entrance',
-            'site': 'GOSH DRIVE',
-            'isIndoor': true,
-            'floor': floor,
-            'maxOccupancy': 50,
-          })
-          .end((err, response) => {
-            resolve();
-          });
+            .post('/devices')
+            .set('content-type', 'application/json')
+            .send({
+              '_id': cameraId,
+              'deviceType': 'camera',
+              'deviceLocation': 'Main entrance',
+              'site': 'GOSH DRIVE',
+              'isIndoor': true,
+              'floor': floor,
+              'maxOccupancy': 50,
+            })
+            .end((err, response) => {
+              resolve();
+            });
       });
-    })
+    });
 
     it('It should return latest records of new room', (done) => {
       const sentence = 'You are now at the Main entrance area. there are 7 people in the queue. ';

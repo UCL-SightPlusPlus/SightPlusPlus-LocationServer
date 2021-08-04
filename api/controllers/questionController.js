@@ -3,10 +3,6 @@
 const sentenceAdapter = require('../../adapters/sentenceAdapter');
 const qnaAdapter = require('../../adapters/qnaMakerAdapter');
 
-const subscription_key = "003c1506c44b4becb2b33ec1b387ea78";
-const endpoint = "https://gosh-bot.cognitiveservices.azure.com/";
-const runtime_endpoint = "https://gosh-bot.azurewebsites.net";
-
 const updater = require('../../schedulers/deviceUpdater');
 
 exports.questionHandler = function(req, res) {
@@ -21,7 +17,7 @@ exports.questionHandler = function(req, res) {
   } else {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
     qnaAdapter.generateAnswer(question).then((response) =>
-      res.status(200).json({'floor': beacon.floor ,'sentence': response.answers[0].answer}));
+        res.status(200).json({'floor': beacon.floor, 'sentence': response!=null ? response.answers[0].answer : "I'm sorry, something went wrong"})
+      );
   }
-  // TODO else send to MS QnA Maker
 };

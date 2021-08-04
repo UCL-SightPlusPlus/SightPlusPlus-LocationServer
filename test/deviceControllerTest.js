@@ -1,7 +1,6 @@
 const server = require('../server.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { response } = require('express');
 
 chai.should();
 chai.use(chaiHttp);
@@ -46,14 +45,14 @@ describe('Device APIs', () => {
       };
 
       chai.request(server)
-        .post('/devices')
-        .set('content-type', 'application/json')
-        .send(device)
-        .end((err, response) => {
-          response.should.have.status(400);
-          response.body.should.be.a('object');
-          done();
-        });
+          .post('/devices')
+          .set('content-type', 'application/json')
+          .send(device)
+          .end((err, response) => {
+            response.should.have.status(400);
+            response.body.should.be.a('object');
+            done();
+          });
     });
   });
 
@@ -86,13 +85,13 @@ describe('Device APIs', () => {
 
     it('It should return that a device does not exist', (done) => {
       chai.request(server)
-        .get('/devices/' + 997)
-        .end((err, response) => {
-          response.should.have.status(404);
-          response.body.should.be.a('object');
-          response.body.should.have.property('message').eq('Device ' + 997 + ' does not exist.');
-          done();
-        });
+          .get('/devices/' + 997)
+          .end((err, response) => {
+            response.should.have.status(404);
+            response.body.should.be.a('object');
+            response.body.should.have.property('message').eq('Device ' + 997 + ' does not exist.');
+            done();
+          });
     });
   });
 
@@ -113,35 +112,35 @@ describe('Device APIs', () => {
           });
     });
 
-    it("It should not update a device's id", (done) => {
+    it('It should not update a device\'s id', (done) => {
       const device = {
         '_id': '1234'
       };
       chai.request(server)
-        .put('/devices/' + id)
-        .send(device)
-        .end((err, response) => {
-          response.should.have.status(200);
-          response.body.should.be.a('object');
-          response.body.should.have.property('_id').eq(id);
-          done();
-        });
+          .put('/devices/' + id)
+          .send(device)
+          .end((err, response) => {
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('_id').eq(id);
+            done();
+          });
     });
 
-    it("It should not update a device", (done) => {
+    it('It should not update a device', (done) => {
       const device = {
         '_id': '1234',
-        'deviceType': 'camera'
+        'deviceType': 'camera',
       };
       chai.request(server)
-        .put('/devices/' + device._id)
-        .send(device)
-        .end((err, response) => {
-          response.should.have.status(404);
-          response.body.should.be.a('object');
-          response.body.should.have.property('message').eq('Device Id not found');
-          done();
-        });
+          .put('/devices/' + device._id)
+          .send(device)
+          .end((err, response) => {
+            response.should.have.status(404);
+            response.body.should.be.a('object');
+            response.body.should.have.property('message').eq('Device Id not found');
+            done();
+          });
     });
   });
 
@@ -159,12 +158,12 @@ describe('Device APIs', () => {
 
     it('It should return that the device does not exist', (done) => {
       chai.request(server)
-        .delete('/devices/' + id)
-        .end((err, response) => {
-          response.should.have.status(404);
-          response.body.should.have.property('message').eq('Device ' + id + ' does not exist.');
-          done();
-        });
+          .delete('/devices/' + id)
+          .end((err, response) => {
+            response.should.have.status(404);
+            response.body.should.have.property('message').eq('Device ' + id + ' does not exist.');
+            done();
+          });
     });
   });
 });

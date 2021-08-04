@@ -1,34 +1,42 @@
-"use strict";
+'use strict';
 
 // <Dependencies>
+const cron = require('node-cron');
 require('dotenv').config();
-const msRest = require("@azure/ms-rest-js");
-const qnamaker = require("@azure/cognitiveservices-qnamaker");
-const qnamaker_runtime = require("@azure/cognitiveservices-qnamaker-runtime");
+const msRest = require('@azure/ms-rest-js');
+const qnamakerRuntime = require('@azure/cognitiveservices-qnamaker-runtime');
 // </Dependencies>
 
-let runtimeClient;
+let runtimeClient = null;
 
 // <GenerateAnswer>
 exports.generateAnswer = async (question) => {
-  console.log(`Querying knowledge base...`)
+  console.log(`Querying knowledge base...`);
+  let requestQuery = null;
 
-  const requestQuery = await runtimeClient.runtime.generateAnswer(
-    process.env.KB_ID,
-    {
-      question: question,
-      top: 1
-    }
-  );
-  console.log(JSON.stringify(requestQuery));
+  requestQuery = await runtimeClient.runtime.generateAnswer(
+      process.env.KB_ID,
+      {
+        question: question,
+        top: 1,
+      },
+  ).catch((error) => {
+    return null;
+  });
   return requestQuery;
-}
+};
 // </GenerateAnswer>
 
-exports.run = async () => {
+exports.run = async (deviceCron) => {
   // <AuthorizationQuery>
   console.log('Starting QnA Maker runtime');
-  const queryRuntimeCredentials = new msRest.ApiKeyCredentials({ inHeader: { 'Authorization': 'EndpointKey ' + process.env.KB_ENDPOINT_KEY } });
-  runtimeClient = new qnamaker_runtime.QnAMakerRuntimeClient(queryRuntimeCredentials, process.env.KB_HOST);
+  const queryRuntimeCredentials = new msRest.ApiKeyCredentials({inHeader: {'Authorization': 'EndpointKey ' + process.env.KB_ENDPOINT_KEY}});
+  runtimeClient = new qnamakerRuntime.QnAMakerRuntimeClient(queryRuntimeCredentials, process.env.KB_HOST);
+
+  cron.schedule( deviceCron, () => {
+    if (runtimeClient == null) {
+      runtimeClient = new qnamakerRuntime.QnAMakerRuntimeClient(queryRuntimeCredentials, process.env.KB_HOST);
+    }
+  });
   // </AuthorizationQuery>
-}
+};
