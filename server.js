@@ -28,9 +28,11 @@ app.use(express.json());
 const recordRoutes = require('./api/routes/recordRoute'); // importing route
 const deviceRoutes = require('./api/routes/deviceRoute');
 const questionRoutes = require('./api/routes/questionRoute');
+const notificationRoutes = require('./api/routes/notificationRoute');
 deviceRoutes(app);
 recordRoutes(app); // register the route
 questionRoutes(app);
+notificationRoutes(app);
 
 qnaAdapter.run(process.env.DEVICE_CRON);
 

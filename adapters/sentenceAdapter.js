@@ -1,108 +1,31 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const Record = mongoose.model('Records');
-const updater = require('../schedulers/deviceUpdater');
-
-exports.automaticMessage = async function(beaconId, lastFloor) {
-  return new Promise((resolve) => {
-    const beacon = updater.deviceTable.find((device) => device._id == beaconId);
-    // console.log(beacon);
-    if (beacon) {
-      const sentences = [];
-      // 2 cases: on the same floor or on a different floor
-      if (lastFloor && (beacon.floor == lastFloor)) {
-        // Return the cameras in the same room as beacon
-        console.log('On last floor');
-        const deviceInLocation = updater.deviceTable.filter((device) => {
-          return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
-        });
-        sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
-        // get latest record of each device
-        Promise.all(deviceInLocation.map(async (device) => {
-          await Record.findOne({deviceId: device._id}, (err, record) => {
-            if (err) {
-              resolve({'status': 400, 'message': err});
-            } else {
-              sentences.push(this.createSentence(record));
-            }
-          }).sort('-timestamp');
-        })).then(() => {
-          const response = {'status': 200, 'message': {'floor': beacon.floor, 'sentence': sentences.join('')}};
-          resolve(response);
-        }).catch((err) => {
-          resolve({'status': 400, 'message': err});
-        });
-      } else {
-        // if on a new floor or last floor is not passed(when user first enter a building), return the records of entire floor
-        console.log('Not on last floor');
-        const deviceOnFloor = updater.deviceTable.filter((device) => device.floor == beacon.floor && (device.deviceType == 'camera'));
-        const locations = [...new Set(deviceOnFloor.map((device) => device.deviceLocation))];
-        const sentence = `You are now on the ${this.ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
-        if (locations.length > 1) {
-          sentence.substring(0, sentence.lastIndexOf(',')) + `and` + sentence.substring(sentence.lastIndexOf(',')+1, sentence.length);
-        }
-        sentences.push(sentence);
-        locations.map((loc) => {
-          const deviceInLocation = deviceOnFloor.filter((device) => device.deviceLocation == loc);
-          Promise.all(deviceInLocation.map(async (device) => {
-            await Record.findOne({deviceId: device._id}, (err, record) => {
-              if (record != null) {
-                sentences.push(`In the ${loc} area `);
-                sentences.push(this.createSentence(record));
-              }
-            });
-          })).then(() => {
-            const response = {'floor': beacon.floor, 'sentence': sentences.join('')};
-            resolve( {'status': 200, 'message': response});
-          }).catch((err) => {
-            resolve({'status': 400, 'message': err});
-          });
-        });
-      }
-    } else {
-      const errResponse = {'message': 'Beacon not found'};
-      resolve( {'status': 400, 'message': errResponse});
-    }
-  });
+exports.createSameFloorSentencesFromRecords = function(beacon, records, recordType) {
+  const sentences = [];
+  sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
+  if (records.length > 0) {
+    records.forEach( (record) => sentences.push(this.createSentence(record)));
+  } else if (records.length < 1 && recordType == 1) {
+    sentences.push('There is no information about a queue in this area.');
+  } else if (records.length < 1 && recordType == 2) {
+    sentences.push('There is no information about a seating space in this area.');
+  }
+  return sentences.join('');
 };
 
-exports.questionMessage = async function(beaconId, lastFloor, recordType) {
-// TODO
-  return new Promise((resolve) => {
-    const beacon = updater.deviceTable.find((device) => device._id == beaconId);
-    // console.log(beacon);
-    if (beacon) {
-      const sentences = [];
-      const deviceInLocation = updater.deviceTable.filter((device) => {
-        return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
-      });
-      sentences.push(`You are now at the ${beacon.deviceLocation} area. `);
-      // get latest record of each device
-      Promise.all(deviceInLocation.map(async (device) => {
-        await Record.findOne({deviceId: device._id, recordType: recordType}, (err, record) => {
-          if (err) {
-            resolve({'status': 400, 'message': err});
-          } else {
-            record != null ? sentences.push(this.createSentence(record)) : null;
-          }
-        }).sort('-timestamp');
-      })).then(() => {
-        if (sentences.length < 2 && recordType == 1) {
-          sentences.push('There is no information about a queue in this area.');
-        } else if (sentences.length < 2 && recordType == 2) {
-          sentences.push('There is no information about a seating space in this area.');
-        }
-        const response = {'status': 200, 'message': {'floor': beacon.floor, 'sentence': sentences.join('')}};
-        resolve(response);
-      }).catch((err) => {
-        resolve({'status': 400, 'message': err});
-      });
-    } else {
-      const errResponse = {'message': 'Beacon not found'};
-      resolve( {'status': 400, 'message': errResponse});
-    }
-  });
+exports.createDiffFloorSentencesFromRecords = function(beacon, records, locations) {
+  const sentences = [];
+  const sentence = `You are now on the ${this.ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
+  if (locations.length > 1) {
+    sentences.push(sentence.substring(0, sentence.lastIndexOf(',')) + 'and' + sentence.substring(sentence.lastIndexOf(',')+1, sentence.length));
+  }
+  else {
+    sentences.push(sentence);
+  }
+  if (records.length > 0) {
+    records.forEach( (record) => sentences.push(`In the ${record.newLoc} area ${this.createSentence(record)}`));
+  }
+  return sentences.join('');
 };
 
 // eslint-disable-next-line require-jsdoc

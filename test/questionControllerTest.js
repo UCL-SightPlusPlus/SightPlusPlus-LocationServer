@@ -20,7 +20,7 @@ describe('Question APIs', () => {
         'isIndoor': true,
         'floor': floor,
         'maxOccupancy': 50,
-      }
+      },
     ];
 
     return new Promise((resolve) => {
@@ -76,7 +76,7 @@ describe('Question APIs', () => {
               'timestamp': time,
               'deviceId': cameraId,
               'recordType': 1,
-              'queueing': 5
+              'queueing': 5,
             })
             .end((err, response) => {
               console.log('Sent record?');
@@ -90,7 +90,7 @@ describe('Question APIs', () => {
           .post(`/questions/${sensorId}`)
           .set('content-type', 'application/json')
           .send({
-            'question': 'How many people are in the queue?'
+            'question': 'How many people are in the queue?',
           })
           .end((err, response) => {
             console.log(response.body);
@@ -106,7 +106,7 @@ describe('Question APIs', () => {
           .post(`/questions/${sensorId}`)
           .set('content-type', 'application/json')
           .send({
-            'question': 'How many chairs are available?'
+            'question': 'How many chairs are available?',
           })
           .end((err, response) => {
             console.log(response.body);

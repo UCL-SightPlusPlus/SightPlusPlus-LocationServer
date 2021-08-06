@@ -99,7 +99,7 @@ describe('Device APIs', () => {
   describe('Test PUT route /devices/:id', () => {
     it('It should update a device', (done) => {
       const device = {
-        'deviceType': 'camera'
+        'deviceType': 'camera',
       };
       chai.request(server)
           .put('/devices/' + id)
@@ -114,7 +114,7 @@ describe('Device APIs', () => {
 
     it('It should not update a device\'s id', (done) => {
       const device = {
-        '_id': '1234'
+        '_id': '1234',
       };
       chai.request(server)
           .put('/devices/' + id)
