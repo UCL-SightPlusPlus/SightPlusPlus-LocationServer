@@ -1,11 +1,13 @@
 'use strict';
 
+const port = process.env.UDP_PORT || 7979;
+
 module.exports = () => {
   const dgram = require('dgram');
   const udpServer = dgram.createSocket('udp4');
 
   udpServer.on('listening', () => {
-    console.log(`udp server listening on ${process.env.UDP_PORT}.`);
+    console.log(`UDP server listening on ${port}.`);
   });
 
   udpServer.on('message', (msg, rinfo) => {
@@ -18,5 +20,5 @@ module.exports = () => {
     console.log(err);
   });
 
-  udpServer.bind(process.env.UDP_PORT, process.env.UDP_SERVER_HOST);
+  udpServer.bind(port, process.env.UDP_SERVER_HOST);
 };

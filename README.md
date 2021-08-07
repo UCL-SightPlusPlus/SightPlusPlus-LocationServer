@@ -17,7 +17,28 @@ DATABASE_NAME = $dbName
 UDP_SERVER_HOST = localhost
 UDP_PORT = 7979
 DEVICE_CRON = 0 * * * *
+KB_HOST= $knowledgebase_host
+KB_ENDPOINT_KEY= $$knowledgebase_key
+KB_ID = $knowledgebase_id
 ```
+
+Set the `KB_ENDPOINT_KEY` and `KB_ID` variables to your
+QnA Maker authoring endpoint key and knowledgebase id.
+
+These values can be found in the QnA Maker service (https://www.qnamaker.ai/Home/MyServices).
+Look up your Knowledge Base. Then, press the "View Code" button.
+
+The 'KB_ID' can be found on the 1st line
+
+`POST /knowledgebases/{KB_ID}/generateAnswer`
+
+The `KB_ENDPOINT_KEY` can be found on the 3rd line
+`Authorization: EndpointKey {KB_ENDPOINT_KEY}`
+
+
+Set the `KB_HOST` variable to your QnA Maker runtime endpoint.
+The value of `KB_HOST` has the format https://YOUR-RESOURCE-NAME.azurewebsites.net
+
 Start the api
 ```
 npm start
