@@ -108,3 +108,9 @@ dist
 
 # IntelliJ folder
 .idea/
+
+# VS Code folder
+.vscode/
+
+*.code-workspace
+data/
