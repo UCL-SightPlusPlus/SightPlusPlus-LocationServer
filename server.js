@@ -2,7 +2,7 @@ require('dotenv').config(); // load env vars in global var process.env
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const cronExpression = '0 * * * *';
+const cronExpression = process.env.DEVICE_CRON || '0 * * * *';
 const mongoose = require('mongoose');
 // created model loading here
 const Device = require('./api/models/deviceModel');
@@ -18,17 +18,9 @@ socketServer();
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-if ( process.env.DATABASE_USER == '' || process.env.DATABASE_USER == undefined) {
-  mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
-    useNewUrlParser: true, useUnifiedTopology: true});
-} else {
-  mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
-    auth: {
-      user: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-    },
-    ssl: (process.env.DATABASE_SSL === 'true'), retrywrites: false, maxIdleTimeMS: 120000, useNewUrlParser: true, useUnifiedTopology: true});
-}
+mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
+  useNewUrlParser: true, useUnifiedTopology: true});
+
 
 // Initialize scheduler
 updater.run_scheduler(cronExpression);
