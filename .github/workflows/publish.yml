@@ -9,6 +9,8 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches: [ main ]
 
 env:
   AZURE_WEBAPP_NAME: sightPlusPlus-location   # set this to your application's name
