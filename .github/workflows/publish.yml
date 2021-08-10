@@ -22,10 +22,9 @@ env:
   DATABASE_USER: ${{ secrets.DATABASE_USER }}
   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
-  PORT: 443
   UDP_SERVER_HOST: localhost
   UDP_PORT: 7979
-  DEVICE_CRON: '0 * * * *'
+  DEVICE_CRON: "0 * * * *"
   KB_HOST: ${{ secrets.KB_HOST }}
   KB_ENDPOINT_KEY: ${{ secrets.KB_ENDPOINT_KEY }}
   KB_ID: ${{ secrets.KB_ID }}
