@@ -13,9 +13,10 @@ exports.updateDeviceTable = function getDevices() {
   Device.find({}, function(err, data) {
     if (err) {
       console.error('Could not fetch devices.');
+    } else {
+      const stringData = JSON.stringify(data);
+      const jsonData = JSON.parse(stringData);
+      exports.deviceTable = jsonData;
     }
-    const stringData = JSON.stringify(data);
-    const jsonData = JSON.parse(stringData);
-    exports.deviceTable = jsonData;
   });
 };

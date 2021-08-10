@@ -17,7 +17,17 @@ socketServer();
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {useNewUrlParser: true, useUnifiedTopology: true});
+if ( process.env.DATABASE_USER == "" || process.env.DATABASE_USER == undefined) {
+  mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
+    useNewUrlParser: true, useUnifiedTopology: true});
+} else {
+  mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
+    auth: {
+      user: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+    },
+    ssl: (process.env.DATABASE_SSL === 'true'), retrywrites: false, maxIdleTimeMS: 120000, useNewUrlParser: true, useUnifiedTopology: true});
+}
 
 // Initialize scheduler
 updater.run_scheduler(process.env.DEVICE_CRON);

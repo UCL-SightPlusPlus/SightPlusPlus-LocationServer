@@ -21,11 +21,12 @@ exports.questionHandler = function(req, res) {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
     qnaAdapter.generateAnswer(question).then((response) =>
       // eslint-disable-next-line quotes
-      res.status(200).json({'floor': beacon.floor, 'sentence': response!=null ? response.answers[0].answer : "I'm sorry, something went wrong"}),
+      res.status(200).json({'floor': ((typeof beacon === 'undefined') ? null : beacon.floor), 'sentence': response!=null ? response.answers[0].answer : "I'm sorry, something went wrong"}),
     );
   }
 };
 
+// eslint-disable-next-line require-jsdoc
 async function questionMessage(beaconId, lastFloor, recordType) {
   return new Promise((resolve) => {
     const beacon = updater.deviceTable.find((device) => device._id == beaconId);

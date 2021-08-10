@@ -10,7 +10,7 @@ const updater = require('../../schedulers/deviceUpdater');
 exports.listAllDevices = function(req, res) {
   Device.find({}, function(err, task) {
     if (err) {
-      res.send(err);
+      res.status(500).json({'error': err.toString()});
     }
     res.json(task);
   });
