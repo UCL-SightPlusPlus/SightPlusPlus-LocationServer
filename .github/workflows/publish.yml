@@ -3,6 +3,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
+name: Publish Node.js
+
 on:
   push:
     branches:
@@ -15,6 +17,7 @@ env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
   DATABASE_PORT: 27017
   DATABASE_NAME: SightPlusPlus
+  PORT: 8080
   UDP_SERVER_HOST: localhost
   UDP_PORT: 7979
   DEVICE_CRON: '0 * * * *'
