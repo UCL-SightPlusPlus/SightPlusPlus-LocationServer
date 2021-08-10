@@ -17,7 +17,7 @@ env:
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
   DATABASE_PORT: 27017
   DATABASE_NAME: SightPlusPlus
-  PORT: 8080
+  PORT: 443
   UDP_SERVER_HOST: localhost
   UDP_PORT: 7979
   DEVICE_CRON: '0 * * * *'
