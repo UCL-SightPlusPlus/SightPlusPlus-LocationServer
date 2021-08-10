@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    env_file: ./docker.env
+    env_file: ./.env
     environment:
       NODE_ENV: production
     ports:
