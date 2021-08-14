@@ -5,6 +5,7 @@ const Device = mongoose.model('Devices');
 exports.run_scheduler = function(deviceCron) {
   this.updateDeviceTable();
   cron.schedule( deviceCron, () => {
+    console.debug('Updating device table...');
     this.updateDeviceTable();
   });
 };

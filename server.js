@@ -19,15 +19,22 @@ socketServer();
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`, {
-  useNewUrlParser: true, useUnifiedTopology: true});
+  useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 1000});
 
+mongoose.connection.once('connected', function() {
+  console.log('Successfully connected to MongoDB.');
+}).on('error', function(err) {
+  console.log({'MONGODB ERR': err});
+});
 
+console.log(mongoose.connection.readyState);
 // Initialize scheduler
 updater.run_scheduler(cronExpression);
 qnaAdapter.run(cronExpression);
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.setMaxListeners(9);
 
 const recordRoutes = require('./api/routes/recordRoute'); // importing route
 const deviceRoutes = require('./api/routes/deviceRoute');

@@ -4,9 +4,8 @@ const mongoose = require('mongoose');
 const Record = mongoose.model('Records');
 
 const updater = require('../../schedulers/deviceUpdater');
-const sentenceAdapter = require('../../adapters/sentenceAdapter')
 
-exports.createRecord = function(req, res) {
+exports.createRecord = async function(req, res) {
   const newRecord = new Record(req.body);
   newRecord.save(function(err, record) {
     if (err) {
@@ -42,7 +41,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
             res.status(400);
             res.send(err);
           }
-          if(data != null) {
+          if (data != null) {
             records.push(data);
           }
         }).sort('-timestamp');
