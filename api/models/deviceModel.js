@@ -10,6 +10,7 @@ const deviceSchema = new Schema({
   deviceType: {
     type: String,
     required: true,
+    enum: ['camera', 'BLE'],
   },
   deviceLocation: {
     type: String,

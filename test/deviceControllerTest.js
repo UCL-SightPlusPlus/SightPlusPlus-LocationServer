@@ -12,7 +12,7 @@ describe('Device APIs', () => {
     it('It should return the device', (done) => {
       const device = {
         '_id': id,
-        'deviceType': 'sensor',
+        'deviceType': 'BLE',
         'deviceLocation': 'Main entrance',
         'site': 'GOSH DRIVE',
         'isIndoor': true,
@@ -36,7 +36,7 @@ describe('Device APIs', () => {
     it('It should return a 400 error', (done) => {
       const device = {
         '_id': id,
-        'deviceType': 'sensor',
+        'deviceType': 'BLE',
         'deviceLocation': 'Main entrance',
         'site': 'GOSH DRIVE',
         'isIndoor': true,
