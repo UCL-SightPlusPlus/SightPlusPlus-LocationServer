@@ -32,6 +32,10 @@ exports.undefinedSentence = function() {
   return 'I\'m sorry, I do not know the answer to that question.';
 };
 
+exports.locationSentence = function locationSentence(beacon) {
+  return `You are now at the ${beacon.deviceLocation} area on the ${this.ordinalSuffixOf(beacon.floor)} floor`;
+};
+
 // eslint-disable-next-line require-jsdoc
 exports.createSentence = function createSentenceUsingRecord(record) {
   let sentence = '';

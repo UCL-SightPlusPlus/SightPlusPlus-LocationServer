@@ -116,5 +116,21 @@ describe('Question APIs', () => {
             done();
           });
     });
+
+    it('It should return information about the user\'s location', (done) => {
+      chai.request(server)
+          .post(`/questions/${sensorId}`)
+          .set('content-type', 'application/json')
+          .send({
+            'question': 'Where am I?',
+          })
+          .end((err, response) => {
+            console.log(response.body);
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('sentence').eq('You are now at the Main entrance area on the 998th floor');
+            done();
+          });
+    });
   });
 });
