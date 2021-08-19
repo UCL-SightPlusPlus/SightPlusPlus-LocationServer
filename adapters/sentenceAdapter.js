@@ -28,6 +28,10 @@ exports.createDiffFloorSentencesFromRecords = function(beacon, records, location
   return sentences.join('');
 };
 
+exports.undefinedSentence = function() {
+  return 'I\'m sorry, I do not know the answer to that question.';
+};
+
 // eslint-disable-next-line require-jsdoc
 exports.createSentence = function createSentenceUsingRecord(record) {
   let sentence = '';

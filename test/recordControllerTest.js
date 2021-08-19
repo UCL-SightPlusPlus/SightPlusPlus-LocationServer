@@ -14,7 +14,7 @@ describe('Record API', () => {
     const devices = [
       {
         '_id': sensorId,
-        'deviceType': 'sensor',
+        'deviceType': 'BLE',
         'deviceLocation': 'Main entrance',
         'site': 'GOSH DRIVE',
         'isIndoor': true,
