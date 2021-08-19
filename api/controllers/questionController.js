@@ -7,15 +7,24 @@ const sentenceAdapter = require('../../adapters/sentenceAdapter');
 const qnaAdapter = require('../../adapters/qnaMakerAdapter');
 
 const updater = require('../../schedulers/deviceUpdater');
+const keyword_extractor = require('keyword-extractor');
 
 exports.questionHandler = function(req, res) {
-  const question = req.body.question;
+  const question = req.body.question.toLowerCase();
+  const extractionResult = keyword_extractor.extract(question, {
+    language: 'english',
+    remove_digits: true,
+    return_changed_case: true,
+    remove_duplicates: false});
   // TODO improve this (Maybe some kind of bot that can analyze the question?)
-  if (question.includes('queue') || question.includes('line')) {
+  if (extractionResult.includes('queue') || extractionResult.includes('line')) {
     questionMessage(req.params.deviceId, req.query.lastFloor, 1).then( (response) =>
       res.status(response.status).json(response.message));
-  } else if (question.includes('seats') || question.includes('chairs')) {
+  } else if (extractionResult.includes('seats') || extractionResult.includes('chairs')) {
     questionMessage(req.params.deviceId, req.query.lastFloor, 2).then( (response) =>
+      res.status(response.status).json(response.message));
+  } else if ((question.includes('where') && question.includes('i')) || extractionResult.includes('location')) {
+    locationMessage(req.params.deviceId).then( (response) =>
       res.status(response.status).json(response.message));
   } else if (process.env.KB_HOST != '') {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
@@ -60,3 +69,16 @@ async function questionMessage(beaconId, lastFloor, recordType) {
     }
   });
 };
+
+async function locationMessage(beaconId) {
+  return new Promise((resolve) => {
+    const beacon = updater.deviceTable.find((device) => device._id == beaconId);
+    if (beacon) {
+      const response = {'status': 200, 'message': {'floor': beacon.floor, 'sentence': sentenceAdapter.locationSentence(beacon)}};
+      resolve(response);
+    } else {
+      const errResponse = {'message': 'Beacon not found'};
+      resolve( {'status': 400, 'message': errResponse});
+    }
+  });
+}
