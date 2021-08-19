@@ -1,5 +1,7 @@
 require('dotenv').config(); // load env vars in global var process.env
 const express = require('express');
+const fs = require('fs');
+const https = require('https');
 const app = express();
 const port = process.env.PORT || 3000;
 const cronExpression = process.env.DEVICE_CRON || '0 * * * *';
@@ -44,6 +46,10 @@ recordRoutes(app); // register the route
 questionRoutes(app);
 notificationRoutes(app);
 
-module.exports = app.listen(port, () => {
-  console.log('Sight++ RESTful API server started on: ' + port);
-});
+module.exports = https.createServer({
+  key: fs.readFileSync('./certs/server.key'),
+  cert: fs.readFileSync('./certs/server.cert'),
+}, app)
+    .listen(port, () => {
+      console.log('Sight++ RESTful API server started on: ' + port);
+    });
