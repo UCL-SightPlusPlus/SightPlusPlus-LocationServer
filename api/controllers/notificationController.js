@@ -41,6 +41,7 @@ exports.notificationCreation = (req, res) => {
       const locations = [...new Set(deviceOnFloor.map((device) => device.deviceLocation))];
       const deviceInLocation = [];
       locations.map((loc) => {
+        // eslint-disable-next-line prefer-spread
         deviceInLocation.push.apply(deviceInLocation, deviceOnFloor.filter((device) => device.deviceLocation == loc));
       });
       Promise.all(deviceInLocation.map(async (device) => {

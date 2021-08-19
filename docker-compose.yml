@@ -2,24 +2,12 @@ version: '3.4'
 
 services:
   sightplusplus:
-    image: sightplusplus
+    image: locationserver.azurecr.io/sightplusplus
     restart: always
     build:
       context: .
       dockerfile: ./Dockerfile
     env_file: ./.env
-      # args:
-      #   - DATABASE_HOST=localhost
-      #   - DATABASE_PORT=27017
-      #   - DATABASE_NAME=SightPlusPlus
-      #   - PORT=8080
-      #   - UDP_SERVER_HOST=localhost
-      #   - UDP_PORT=7979
-      #   - DEVICE_CRON='0 * * * *'
-      #   - CLEAR_DB=true
-      #   - KB_HOST=https://gosh-bot.azurewebsites.net
-      #   - KB_ENDPOINT_KEY=15a397e6-5775-4c42-8562-a040fbb090a9
-      #   - KB_ID=49a7fbf8-3d53-45ab-ac14-0a4fafb505f5
     environment:
       NODE_ENV: production
     ports:
@@ -30,7 +18,5 @@ services:
   mongo:
     container_name: mongo
     image: mongo
-    volumes:
-      - ./data:/data/db
     ports:
       - "27017:27017"
