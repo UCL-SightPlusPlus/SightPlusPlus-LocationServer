@@ -17,12 +17,15 @@ exports.questionHandler = function(req, res) {
   } else if (question.includes('seats') || question.includes('chairs')) {
     questionMessage(req.params.deviceId, req.query.lastFloor, 2).then( (response) =>
       res.status(response.status).json(response.message));
-  } else {
+  } else if (process.env.KB_HOST != '') {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
     qnaAdapter.generateAnswer(question).then((response) =>
       // eslint-disable-next-line quotes
       res.status(200).json({'floor': ((typeof beacon === 'undefined') ? null : beacon.floor), 'sentence': response!=null ? response.answers[0].answer : "I'm sorry, something went wrong"}),
     );
+  } else {
+    const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
+    res.status(200).json({'floor': ((typeof beacon === 'undefined') ? null : beacon.floor), 'sentence': sentenceAdapter.undefinedSentence()});
   }
 };
 
