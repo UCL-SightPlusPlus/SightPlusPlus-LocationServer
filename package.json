@@ -4,7 +4,7 @@
   "description": "UCL's Sight++ v3 project .",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "mocha --exit"
   },
   "repository": {
