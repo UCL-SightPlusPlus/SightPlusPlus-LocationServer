@@ -113,3 +113,7 @@ dist
 
 *.code-workspace
 data/
+
+# SSL Certs
+*.cert
+*.key
