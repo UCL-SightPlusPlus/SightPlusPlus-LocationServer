@@ -6,13 +6,13 @@ $appsettingsPath = Join-Path (Get-ScriptDirectory) 'template.env'
 $appsettings = Get-Content $appsettingsPath -Raw
 
 #Replace values for sharepoint
-Write-Host "Please provide the following settings to configure the application:"
+Write-Host "Please provide the following settings to configure the application"
 
-$port = Read-Host "The port you would like the REST API to use:"
-$appsettings = $appsettings -replace "PORT=", "PORT=$port"
+$port = Read-Host "The port you would like the REST API to use"
+$appsettings = $appsettings -replace "REST_PORT=", "REST_PORT=$port"
 
-$udpPort = Read-Host "The UDP port you would like the app to use:"
-$appsettings = $appsettings -replace "UDP_PORT", "UDP_PORT=$udpPort"
+$udpPort = Read-Host "The UDP port you would like the app to use"
+$appsettings = $appsettings -replace "UDP_PORT=", "UDP_PORT=$udpPort"
 
 $enableQnAMaker = Read-Host "Would you like to connect Sight++ to an Azure QnA Maker service to enable ChatBot capabilities?`n([Y]es/[N])o"
 If ($enableQnAMaker.ToUpper() -match "Y" -or $enableQnAMaker.ToUpper() -match "YES") {
@@ -26,7 +26,7 @@ If ($enableQnAMaker.ToUpper() -match "Y" -or $enableQnAMaker.ToUpper() -match "Y
     $appsettings = $appsettings -replace "KB_ID=", "KB_ID=$kbId"
 }
 
-Replace values for database
+# Replace values for database
 $enableDatabase = Read-Host "Would you like to setup a username and a password for the MongoDB?`n([Y]es/[N])o"
 If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "YES") {
     $Uid = Read-Host "Database User ID"
@@ -36,7 +36,19 @@ If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "Y
     $appsettings = $appsettings -replace "DATABASE_PASSWORD=", "DATABASE_PASSWORD=$Password"
 }
 
+$enableDatabase = Read-Host "Would you like to setup SSL for the REST API?`n([Y]es/[N])o"
+If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "YES") {
+    $appsettings = $appsettings -replace "SSL=", "SSL=YES"
+    mkdir -p "../certs"
+    $sslHost = Read-Host "The host you would like the REST API to run on (e.g IP or domain)"
+    openssl req -nodes -new -x509 -keyout ../certs/server.key -out ../certs/server.cert -subj "/C=UK/ST=London/L=London/O=Sight++/OU=LocationServer/CN=$sslHost"
+} else {
+    $appsettings = $appsettings -replace "SSL=", "SSL=NO"
+}
+
 # Write to appsettings.json
 $configuredAppsettingsPath = Join-Path (Get-ScriptDirectory) '../.env'
 Set-Content -Path $configuredAppsettingsPath -Value $appsettings
 Write-Host "Configuration saved to .env"
+
+sleep 10
