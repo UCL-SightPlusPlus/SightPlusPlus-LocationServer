@@ -36,7 +36,7 @@ If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "Y
     $appsettings = $appsettings -replace "DATABASE_PASSWORD=", "DATABASE_PASSWORD=$Password"
 }
 
-$enableDatabase = Read-Host "Would you like to setup SSL for the REST API?`n([Y]es/[N])o"
+$enableDatabase = Read-Host "Would you like to setup SSL for the REST API?`n([Y]es/[N])o. Note: You must have openssl installed"
 If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "YES") {
     $appsettings = $appsettings -replace "SSL=", "SSL=YES"
     mkdir -p "../certs"

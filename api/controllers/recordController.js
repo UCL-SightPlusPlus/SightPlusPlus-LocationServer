@@ -10,7 +10,7 @@ exports.createRecord = async function(req, res) {
   newRecord.save(function(err, record) {
     if (err) {
       res.status(400);
-      res.send(err);
+      res.send(err.toString());
     }
     res.json(record);
   });
@@ -22,7 +22,7 @@ exports.getAllLatestRecordsUsingFloor = async function(req, res) {
     Record.find({}, function(err, task) {
       if (err) {
         res.status(400);
-        res.send(err);
+        res.send(err.toString());
       }
       res.json(task);
     });

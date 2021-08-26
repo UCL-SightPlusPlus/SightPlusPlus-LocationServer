@@ -12,6 +12,7 @@ const Record = require('./api/models/recordModel');
 
 // Start the scheduler
 const updater = require('./schedulers/deviceUpdater');
+const orgServerUpdater = require('./schedulers/organisationServerUpdater');
 
 const qnaAdapter = require('./adapters/qnaMakerAdapter');
 // start socket server
@@ -31,6 +32,7 @@ mongoose.connection.once('connected', function() {
 
 // Initialize scheduler
 updater.run_scheduler(cronExpression);
+orgServerUpdater.run_scheduler(cronExpression);
 qnaAdapter.run(cronExpression);
 
 app.use(express.urlencoded({extended: true}));
