@@ -3,7 +3,6 @@ require('dotenv').config();
 const cron = require('node-cron');
 const mongoose = require('mongoose');
 const Record = mongoose.model('Records');
-const Device = mongoose.model('Devices');
 const updater = require('./deviceUpdater');
 
 const http = require('http');
@@ -11,7 +10,7 @@ const http = require('http');
 
 exports.run_scheduler = function(deviceCron) {
   cron.schedule( deviceCron, () => {
-    const dev = [];
+    const updatedDevices = [];
     const devices = updater.deviceTable;
     const date = new Date();
     console.info(devices);
@@ -27,45 +26,45 @@ exports.run_scheduler = function(deviceCron) {
               d.running =false;
             }
             console.info(`Id: ${device._id}, record date: ${record.timestamp}, minutes: ${minutes}`);
-            dev.push(d);
+            updatedDevices.push(d);
           } else {
             d.running= false;
-            dev.push(d);
+            updatedDevices.push(d);
           }
         }).sort('-timestamp');
       } else {
-        dev.push(device);
+        updatedDevices.push(device);
       }
     })).then(() => {
-      console.info(dev);
-      // const encodedDevices = new TextEncoder().encode(
-      //     JSON.stringify(dev),
-      // );
-      // const options = {
-      //   hostname: process.env.ORG_HOST,
-      //   port: process.env.ORG_PORT,
-      //   path: '/todos',
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Content-Length': encodedDevices.length,
-      //   },
-      // };
-      // const req = http.request(options, (res) => {
-      //   console.log(`statusCode: ${res.statusCode}`);
-      //
-      //   res.on('data', (d) => {
-      //     process.stdout.write(d);
-      //   });
-      // });
-      //
-      // req.on('error', (error) => {
-      //   console.error(error);
-      // });
-      //
-      // req.write(encodedDevices);
-      // req.end();
+      console.info(updatedDevices);
+      const body = {
+        'site_name': process.env.SITE,
+        'devices': updatedDevices,
+      };
+      const encodedDevices = new TextEncoder().encode(
+          JSON.stringify(body),
+      );
+      const options = {
+        hostname: process.env.ORG_HOST,
+        port: process.env.ORG_PORT,
+        path: '/profile',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': encodedDevices.length,
+        },
+      };
+      const req = http.request(options, (res) => {
+        console.log(`statusCode: ${res.statusCode}`);
+        res.on('data', (d) => {
+          process.stdout.write(d);
+        });
+      });
+      req.on('error', (error) => {
+        console.error(error);
+      });
+      req.write(encodedDevices);
+      req.end();
     });
-    // send devices to org server
   });
 };
