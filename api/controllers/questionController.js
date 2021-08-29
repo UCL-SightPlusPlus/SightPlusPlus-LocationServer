@@ -33,10 +33,14 @@ exports.questionHandler = function(req, res) {
       res.status(response.status).json(response.message));
   } else if (process.env.KB_HOST != '') {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
-    qnaAdapter.generateAnswer(question).then((response) =>
-      // eslint-disable-next-line quotes
-      res.status(200).json({'floor': ((typeof beacon === 'undefined') ? null : beacon.floor), 'sentence': response!=null ? response.answers[0].answer : "I'm sorry, something went wrong"}),
-    );
+    qnaAdapter.generateAnswer(question).then((response) => {
+      const floor = (typeof beacon === 'undefined') ? null : beacon.floor;
+      const sentence = (response != null) ? response.answers[0].answer : 'I\'m sorry, something went wrong';
+      res.status(200).json({
+        'floor': floor,
+        'sentence': sentence
+      });
+    });
   } else {
     const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
     res.status(200).json({'floor': ((typeof beacon === 'undefined') ? null : beacon.floor), 'sentence': sentenceAdapter.undefinedSentence()});
