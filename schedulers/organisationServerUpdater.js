@@ -7,7 +7,10 @@ const updater = require('./deviceUpdater');
 
 const http = require('http');
 
-
+/**
+ * Starts the scheduler that sends the list of devices and their status to the organisation server based on the specified cron expression.
+ * @param {Object} deviceCron - The cron expression that specifies when the scheduler will run.
+ */
 exports.run_scheduler = function(deviceCron) {
   cron.schedule( deviceCron, () => {
     const updatedDevices = [];

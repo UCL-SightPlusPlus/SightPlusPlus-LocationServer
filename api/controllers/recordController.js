@@ -5,7 +5,12 @@ const Record = mongoose.model('Records');
 
 const updater = require('../../schedulers/deviceUpdater');
 
-exports.createRecord = async function(req, res) {
+/**
+ * Creates a camera's new record.
+ * @param {Object} req - The request sent to POST /records.
+ * @param {Object} res - The response the function will generate.
+ */
+exports.createRecord = function(req, res) {
   const newRecord = new Record(req.body);
   newRecord.save(function(err, record) {
     if (err) {
@@ -16,6 +21,11 @@ exports.createRecord = async function(req, res) {
   });
 };
 
+/**
+ * Returns all the latest records from all the cameras located on the specified floor.
+ * @param {Object} req - The request sent to GET /records.
+ * @param {Object} res - The response the function will generate.
+ */
 exports.getAllLatestRecordsUsingFloor = async function(req, res) {
   // If floor is null, then return all records
   if (req.query.floor == null) {

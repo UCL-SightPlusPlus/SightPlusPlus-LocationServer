@@ -2,6 +2,9 @@
 
 const port = process.env.UDP_PORT || 7979;
 
+/**
+ * Starts the UDP Server so that the users's devices can connect to the server.
+ */
 module.exports = () => {
   const dgram = require('dgram');
   const udpServer = dgram.createSocket('udp4');

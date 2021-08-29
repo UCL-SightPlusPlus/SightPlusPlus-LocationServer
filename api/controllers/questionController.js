@@ -9,6 +9,11 @@ const qnaAdapter = require('../../adapters/qnaMakerAdapter');
 const updater = require('../../schedulers/deviceUpdater');
 const keyword_extractor = require('keyword-extractor');
 
+/**
+ * Handles questions received from POST /questions.
+ * @param {Object} req - The request sent to POST /question.
+ * @param {Object} res - The response the function will generate.
+ */
 exports.questionHandler = function(req, res) {
   const question = req.body.question.toLowerCase();
   const extractionResult = keyword_extractor.extract(question, {
@@ -38,6 +43,14 @@ exports.questionHandler = function(req, res) {
   }
 };
 
+
+/**
+ * Generate the JSON reply that will be sent back to the user's app if the question asked is about a queue or the empty chairs.
+ * @param {string} beaconId - The beacon's ID.
+ * @param {string} lastFloor - The last floor the user's was last seen at.
+ * @param {int} recordType - The type of record to be searched for the user. 1 for queueing, 2 for empty chairs.
+ * @returns {Promise} Promise object represent the JSON reply that will be sent back to the user's app.
+ */
 // eslint-disable-next-line require-jsdoc
 async function questionMessage(beaconId, lastFloor, recordType) {
   return new Promise((resolve) => {
@@ -70,6 +83,11 @@ async function questionMessage(beaconId, lastFloor, recordType) {
   });
 };
 
+/**
+ * Generate the JSON reply that will be sent back to the user's app if the question asked is about the user's location.
+ * @param {string} beaconId - The beacon's ID.
+ * @return {Promise} Promise object represent the JSON reply that will be sent back to the user's app.
+ */
 async function locationMessage(beaconId) {
   return new Promise((resolve) => {
     const beacon = updater.deviceTable.find((device) => device._id == beaconId);

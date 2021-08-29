@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha --exit",
-    "test-with-coverage": "nyc --reporter=text mocha --exit"
+    "test-with-coverage": "nyc --reporter=text mocha --exit",
+    "doc": "jsdoc -c jsdoc-config.json"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
+    "jsdoc": "^3.6.7",
     "nodemon": "^2.0.12",
     "nyc": "^15.1.0"
   },

@@ -30,7 +30,7 @@ mongoose.connection.once('connected', function() {
   console.log({'MONGODB ERR': err});
 });
 
-// Initialize scheduler
+// Initialize schedulers
 updater.run_scheduler(cronExpression);
 orgServerUpdater.run_scheduler(cronExpression);
 qnaAdapter.run(cronExpression);
