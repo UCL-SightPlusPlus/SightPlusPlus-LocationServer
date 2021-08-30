@@ -1,45 +1,31 @@
-# SightPlusPlus
-## How to run
-Make sure you have node installed
-* Install dependencies
-Open up a terminal and direct to the project folder. Run the commands below one by one:
-```
-npm init
-npm i express mongoose
-npm i --save-dev nodemon dotenv
-```
-* Environment settings
-Create a .env file in the project folder and save your environment settings
-```
-DATABASE_HOST = $dbHost
-DATABASE_PORT = $dbPort
-DATABASE_NAME = $dbName
-UDP_SERVER_HOST = localhost
-UDP_PORT = 7979
-DEVICE_CRON = 0 * * * *
-KB_HOST= $knowledgebase_host
-KB_ENDPOINT_KEY= $$knowledgebase_key
-KB_ID = $knowledgebase_id
-```
+# AVINA with Sight++ v3
+AVINA is an open source systems architecture for businesses and organisations to rapidly deploy instances of AI, chatbots and computer vision with Intel hardware at any of their physical sites, with a network aware mobile service that is vicinity and proximity based. 
 
-Set the `KB_ENDPOINT_KEY` and `KB_ID` variables to your
-QnA Maker authoring endpoint key and knowledgebase id.
+# Installation
 
-These values can be found in the QnA Maker service (https://www.qnamaker.ai/Home/MyServices).
-Look up your Knowledge Base. Then, press the "View Code" button.
+## Prerequisites
+- An Azure account with access to QnA service.
+- [Docker](https://www.docker.com/get-started)
+- [Powershell **Core**](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1)
 
-The 'KB_ID' can be found on the 1st line
+## Create an Azure QnA Service and a KnowledgeBase
+Since AVINA integrates with a Chatbot service to answer the user's questions, the relevant information about the service must be provided when setting up the application. To create the Azure QnA Service and the Knowledge Base navigate to [Azure QnA Maker](https://www.qnamaker.ai/Create). Follow the instructions to complete the creation of the chatbot. After the creation of the service, you will be redirected to page like this:
 
-`POST /knowledgebases/{KB_ID}/generateAnswer`
+![QnA Service Creation](https://user-images.githubusercontent.com/19215701/131325569-0d4a04df-2054-4673-9ae6-79ddf531d842.png)
 
-The `KB_ENDPOINT_KEY` can be found on the 3rd line
-`Authorization: EndpointKey {KB_ENDPOINT_KEY}`
+The Knowledge Base ID is in between the `/knowledgebases/{Knowledge Base ID}/generateAnswer`.
+
+The Knowledge Base Host is https url in the 2nd line without the `/qnamaker`.
+
+The Endpoint Key is located on the 3rd line after `EndpointKey {EndpointKey}`.
+
+**⚠️Please keep a copy of these values because we are going to use them later on the deployment.**
 
 
-Set the `KB_HOST` variable to your QnA Maker runtime endpoint.
-The value of `KB_HOST` has the format https://YOUR-RESOURCE-NAME.azurewebsites.net
+## Deployment and Configuration
+The AVINA location server is a containerized application, so it can easily be deployed to a cloud service or configured to run on a custom (on-premises) windows, linux, or mac-os machine of your choosing. An on-premise installation is favorable so that the multiple cameras that are installed can send records to the server with minimum latency. A Powershell script is provided to automate configuration.
 
-Start the api
-```
-npm start
-```
+### Deploying AVINA location server to a server of your choosing
+Download the code. Once unzipped, under the `/scripts` directory (e.g.orca-win-x64/Scripts) you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
+Once run (with Powershell Core) the script will ask you to fill in the required settings to configure the `.env` file, such as the [Knowledge Base ID, the Knowledge Base Host and the Endpoint Key that were generated in an earlier step](#create-an-azure-qna-service-and-a-knowledgebase).  
+After configuring the application, you can deploy it by running `docker-compose up --build -d`.
