@@ -7,7 +7,7 @@ const sentenceAdapter = require('../../adapters/sentenceAdapter');
 const qnaAdapter = require('../../adapters/qnaMakerAdapter');
 
 const updater = require('../../schedulers/deviceUpdater');
-const keyword_extractor = require('keyword-extractor');
+const keywordExtractor = require('keyword-extractor');
 
 /**
  * Handles questions received from POST /questions.
@@ -16,7 +16,7 @@ const keyword_extractor = require('keyword-extractor');
  */
 exports.questionHandler = function(req, res) {
   const question = req.body.question.toLowerCase();
-  const extractionResult = keyword_extractor.extract(question, {
+  const extractionResult = keywordExtractor.extract(question, {
     language: 'english',
     remove_digits: true,
     return_changed_case: true,
@@ -38,7 +38,7 @@ exports.questionHandler = function(req, res) {
       const sentence = (response != null) ? response.answers[0].answer : 'I\'m sorry, something went wrong';
       res.status(200).json({
         'floor': floor,
-        'sentence': sentence
+        'sentence': sentence,
       });
     });
   } else {
