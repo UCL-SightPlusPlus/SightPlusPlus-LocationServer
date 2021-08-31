@@ -98,6 +98,9 @@ exports.createSentence = function createSentenceUsingRecord(record) {
 exports.ordinalSuffixOf = function ordinalSuffixOf(i) {
   const j = i % 10;
   const k = i % 100;
+  if (i == 0) {
+    return 'ground';
+  }
   if (j == 1 && k != 11) {
     return i + 'st';
   }

@@ -15,7 +15,7 @@ module.exports = () => {
 
   udpServer.on('message', (msg, rinfo) => {
     if (msg.toString() === 'Sight++') {
-      udpServer.send('approve');
+      udpServer.send('approve', rinfo.port, rinfo.address);
     }
   });
 
@@ -23,5 +23,10 @@ module.exports = () => {
     console.log(err);
   });
 
-  udpServer.bind(port, process.env.UDP_SERVER_HOST);
+  // emits after the socket is closed using socket.close();
+  udpServer.on('close', function() {
+    console.log('Socket is closed !');
+  });
+
+  udpServer.bind(port);
 };

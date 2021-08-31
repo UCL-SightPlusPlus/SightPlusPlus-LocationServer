@@ -8,7 +8,7 @@ const updater = require('./deviceUpdater');
 const http = require('http');
 
 /**
- * Starts the scheduler that sends the list of devices and their status to the organisation server based on the specified cron expression. 
+ * Starts the scheduler that sends the list of devices and their status to the organisation server based on the specified cron expression.
  * Adds a state to the cameras to specify if they are running or not.
  * @param {Object} deviceCron - The cron expression that specifies when the scheduler will run.
  */
@@ -17,7 +17,6 @@ exports.run_scheduler = function(deviceCron) {
     const updatedDevices = [];
     const devices = updater.deviceTable;
     const date = new Date();
-    console.info(devices);
     Promise.all(devices.map(async (device) => {
       if (device.deviceType == 'camera') {
         await Record.findOne({'deviceId': device._id}, function(error, record) {
@@ -30,7 +29,6 @@ exports.run_scheduler = function(deviceCron) {
             } else {
               d.running =false;
             }
-            console.info(`Id: ${device._id}, record date: ${record.timestamp}, minutes: ${minutes}`);
             updatedDevices.push(d);
           } else {
             d.running= false;
@@ -51,9 +49,9 @@ exports.run_scheduler = function(deviceCron) {
  * @param {Array} devices - The list of devices and their state, that will be sent to the organisation server.
  */
 function sendDevices(devices) {
-  console.info(devices);
   const body = {
     'site_name': process.env.SITE,
+    'url': `https://www.qnamaker.ai/Edit/KnowledgeBase?kbId=${process.env.KB_ID}`,
     'devices': devices,
   };
   const encodedDevices = new TextEncoder().encode(
@@ -70,9 +68,8 @@ function sendDevices(devices) {
     },
   };
   const req = http.request(options, (res) => {
-    console.log(`statusCode: ${res.statusCode}`);
     res.on('data', (d) => {
-      process.stdout.write(d);
+      console.debug('Devices sent to organisation server successfully');
     });
   });
   req.on('error', (error) => {

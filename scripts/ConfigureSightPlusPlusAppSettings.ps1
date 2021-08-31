@@ -11,12 +11,6 @@ Write-Host "Please provide the following settings to configure the application"
 $site = Read-Host "The name of this site"
 $appsettings = $appsettings -replace "SITE=", "SITE=$site"
 
-$port = Read-Host "The port you would like the REST API to use"
-$appsettings = $appsettings -replace "REST_PORT=", "REST_PORT=$port"
-
-$udpPort = Read-Host "The UDP port you would like the app to use"
-$appsettings = $appsettings -replace "UDP_PORT=", "UDP_PORT=$udpPort"
-
 $orgHost = Read-Host "The organisation host to connect to"
 $appsettings = $appsettings -replace "ORG_HOST=", "ORG_HOST=$orgHost"
 
