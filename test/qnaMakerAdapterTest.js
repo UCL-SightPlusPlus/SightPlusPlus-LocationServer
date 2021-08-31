@@ -12,6 +12,6 @@ describe('QnA Maker Adapter', () => {
         sentence.answers[0].should.have.property('answer').eq('The location is open everyday from 9am to 6pm');
         done();
       });
-    });
+    }).timeout(4000);
   });
 });
