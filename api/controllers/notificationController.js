@@ -7,6 +7,11 @@ const updater = require('../../schedulers/deviceUpdater');
 const sentenceAdapter = require('../../adapters/sentenceAdapter');
 
 
+/**
+ * Returns a JSON object with the the automatic notification sent to a user when he moves around the site.
+ * @param {Object} req - The request sent to GET /notifications/:deviceId.
+ * @param {Object} res - The response the function will generate.
+ */
 exports.notificationCreation = (req, res) => {
   const beacon = updater.deviceTable.find((device) => device._id == req.params.deviceId);
   // console.log(beacon);
@@ -15,7 +20,6 @@ exports.notificationCreation = (req, res) => {
     // 2 cases: on the same floor or on a different floor
     if (req.query.lastFloor && (beacon.floor == req.query.lastFloor)) {
       // Return the cameras in the same room as beacon
-      console.log('On last floor');
       const deviceInLocation = updater.deviceTable.filter((device) => {
         return device.floor == beacon.floor && (device.deviceLocation == beacon.deviceLocation) && (device.deviceType == 'camera');
       });
@@ -35,8 +39,6 @@ exports.notificationCreation = (req, res) => {
         res.status(400).json(err);
       });
     } else {
-      // if on a new floor or last floor is not passed(when user first enter a building), return the records of entire floor
-      console.log('Not on last floor');
       const deviceOnFloor = updater.deviceTable.filter((device) => device.floor == beacon.floor && (device.deviceType == 'camera'));
       const locations = [...new Set(deviceOnFloor.map((device) => device.deviceLocation))];
       const deviceInLocation = [];
