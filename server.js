@@ -33,7 +33,9 @@ mongoose.connection.once('connected', function() {
 // Initialize schedulers
 updater.run_scheduler(cronExpression);
 orgServerUpdater.run_scheduler(cronExpression);
-qnaAdapter.run(cronExpression);
+
+// Run the Azure QnA Service
+qnaAdapter.run();
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());

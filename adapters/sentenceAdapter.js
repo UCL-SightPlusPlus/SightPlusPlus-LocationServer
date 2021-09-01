@@ -36,9 +36,9 @@ exports.createDiffFloorSentencesFromRecords = function(beacon, records, location
   } else {
     sentences.push(sentence);
   }
-  if (records.length > 0) {
-    records.forEach( (record) => sentences.push(`In the ${record.newLoc} area ${this.createSentence(record)}`));
-  }
+  // if (records.length > 0) {
+  //   records.forEach( (record) => sentences.push(`In the ${record.newLoc} area ${this.createSentence(record)}`));
+  // }
   return sentences.join('');
 };
 
