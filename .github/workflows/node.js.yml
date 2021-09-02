@@ -29,6 +29,8 @@ jobs:
         echo DATABASE_NAME=SightPlusPlus >> .env
         echo UDP_SERVER_HOST=localhost >> .env
         echo UDP_PORT=7979 >> .env
+        echo ORG_HOST=localhost >> .env
+        echo ORG_PORT=5000 >> .env
         echo DEVICE_CRON="0 * * * *" >> .env
         echo "KB_HOST=$KB_HOST" >> .env
         echo "KB_ENDPOINT_KEY=$KB_ENDPOINT_KEY" >> .env

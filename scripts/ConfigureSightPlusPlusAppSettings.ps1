@@ -14,9 +14,6 @@ $appsettings = $appsettings -replace "SITE=", "SITE=$site"
 $orgHost = Read-Host "The organisation host to connect to"
 $appsettings = $appsettings -replace "ORG_HOST=", "ORG_HOST=$orgHost"
 
-$orgPort = Read-Host "The organisation port to connect to"
-$appsettings = $appsettings -replace "ORG_PORT=", "ORG_PORT=$orgPort"
-
 $enableQnAMaker = Read-Host "Would you like to connect Sight++ to an Azure QnA Maker service to enable ChatBot capabilities?`n([Y]es/[N])o"
 If ($enableQnAMaker.ToUpper() -match "Y" -or $enableQnAMaker.ToUpper() -match "YES") {
     $kbHost = Read-Host "Your Knowledge Base host (e.g. https://my-knowledge-base.azurewebsites.net)"
