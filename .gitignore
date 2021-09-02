@@ -117,3 +117,5 @@ data/
 # SSL Certs
 *.cert
 *.key
+
+docs/
