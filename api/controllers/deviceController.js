@@ -67,8 +67,7 @@ exports.updateDevice = function(req, res) {
   Device.findOneAndUpdate({_id: req.params.deviceId}, req.body, {new: true, useFindAndModify: false},
       function(err, device) {
         if (err) {
-          res.status(400);
-          res.send(err);
+          res.status(400).send(err.toString());
         } else if (device == null) {
           res.status('404').json({message: 'Device Id not found'});
         } else {
@@ -88,8 +87,7 @@ exports.deleteDevice = function(req, res) {
     _id: req.params.deviceId,
   }, function(err, device) {
     if (err) {
-      res.status(400);
-      res.send(err);
+      res.status(400).send(err.toString());
     } else if (device.deletedCount == 0) {
       res.status(404).json({message: 'Device ' + req.params.deviceId + ' does not exist.'});
     } else {

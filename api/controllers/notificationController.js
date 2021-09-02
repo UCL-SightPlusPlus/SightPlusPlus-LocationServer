@@ -41,24 +41,11 @@ exports.notificationCreation = (req, res) => {
     } else {
       const deviceOnFloor = updater.deviceTable.filter((device) => device.floor == beacon.floor && (device.deviceType == 'camera'));
       const locations = [...new Set(deviceOnFloor.map((device) => device.deviceLocation))];
-      const deviceInLocation = [];
-      locations.map((loc) => {
-        // eslint-disable-next-line prefer-spread
-        deviceInLocation.push.apply(deviceInLocation, deviceOnFloor.filter((device) => device.deviceLocation == loc));
-      });
-      Promise.all(deviceInLocation.map(async (device) => {
-        await Record.findOne({deviceId: device._id}, (err, record) => {
-          if (record != null) {
-            record.newLoc = device.deviceLocation;
-            records.push(record);
-          }
-        });
-      })).then(() => {
-        const response = {'floor': beacon.floor, 'sentence': sentenceAdapter.createDiffFloorSentencesFromRecords(beacon, records, locations)};
-        res.status(200).json(response);
-      }).catch((err) => {
-        res.status(400).json(err.toString());
-      });
+      const response = {
+        'floor': beacon.floor,
+        'sentence': sentenceAdapter.createDiffFloorSentencesFromRecords(beacon, locations),
+      };
+      res.status(200).json(response);
     }
   } else {
     const errResponse = {'message': 'Beacon not found'};

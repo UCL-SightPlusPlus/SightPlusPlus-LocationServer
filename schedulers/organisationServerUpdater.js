@@ -72,6 +72,7 @@ exports.sendDevices = async function sendDevices(devices) {
   const options = {
     hostname: process.env.ORG_HOST,
     port: process.env.ORG_PORT,
+    timeout: 1000,
     path: '/profile',
     method: 'POST',
     headers: {
@@ -79,16 +80,20 @@ exports.sendDevices = async function sendDevices(devices) {
       'Content-Length': encodedDevices.length,
     },
   };
-  const req = http.request(options, (res) => {
-    res.on('data', (d) => {
-      console.debug('Devices sent to organisation server successfully');
-      return d;
+  return new Promise( (resolve) => {
+    const req = http.request(options, (res) => {
+      const status = res.statusCode;
+      res.on('data', (d) => {
+        console.debug('Devices sent to organisation server successfully');
+        resolve(res.statusCode);
+      });
     });
+    req.on('error', (error) => {
+      console.error('Could not send devices to the organisation server');
+      resolve(500);
+    });
+
+    req.write(encodedDevices);
+    req.end();
   });
-  req.on('error', (error) => {
-    console.error('Could not send devices to the organisation server');
-    return null;
-  });
-  req.write(encodedDevices);
-  req.end();
 };
