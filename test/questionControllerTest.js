@@ -79,7 +79,6 @@ describe('Question APIs', () => {
               'queueing': 5,
             })
             .end((err, response) => {
-              console.log('Sent record?');
               resolve();
             });
       });
@@ -93,7 +92,6 @@ describe('Question APIs', () => {
             'question': 'How many people are in the queue?',
           })
           .end((err, response) => {
-            console.log(response.body);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('sentence').eq('You are now at the Main entrance area. there are 5 people in the queue. ');
@@ -109,7 +107,6 @@ describe('Question APIs', () => {
             'question': 'How many chairs are available?',
           })
           .end((err, response) => {
-            console.log(response.body);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('sentence').eq('You are now at the Main entrance area. There is no information about a seating space in this area.');
@@ -125,10 +122,59 @@ describe('Question APIs', () => {
             'question': 'Where am I?',
           })
           .end((err, response) => {
-            console.log(response.body);
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('sentence').eq('You are now at the Main entrance area on the 998th floor');
+            done();
+          });
+    });
+    it('It should return information about when the location is open', (done) => {
+      chai.request(server)
+          .post(`/questions/${sensorId}`)
+          .set('content-type', 'application/json')
+          .send({
+            'question': 'What time do you open?',
+          })
+          .end((err, response) => {
+            console.log(response.body);
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('sentence').eq('The location is open everyday from 9am to 6pm');
+            done();
+          });
+    });
+
+    it('It should return an undefined question when the beacon is correct', (done) => {
+      process.env.KB_ID = '123';
+      chai.request(server)
+          .post(`/questions/${sensorId}`)
+          .set('content-type', 'application/json')
+          .send({
+            'question': 'What time do you open?',
+          })
+          .end((err, response) => {
+            console.log(response.body);
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('floor').eq(floor);
+            response.body.should.have.property('sentence').eq('I\'m sorry, something went wrong');
+            done();
+          });
+    });
+
+    it('It should return an undefined question when the beacon is incorrect', (done) => {
+      chai.request(server)
+          .post(`/questions/-1`)
+          .set('content-type', 'application/json')
+          .send({
+            'question': 'What time do you open?',
+          })
+          .end((err, response) => {
+            console.log(response.body);
+            response.should.have.status(200);
+            response.body.should.be.a('object');
+            response.body.should.have.property('floor').eq(null);
+            response.body.should.have.property('sentence').eq('I\'m sorry, something went wrong');
             done();
           });
     });

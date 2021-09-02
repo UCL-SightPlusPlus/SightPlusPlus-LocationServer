@@ -14,8 +14,20 @@ const http = require('http');
  */
 exports.run_scheduler = function(deviceCron) {
   cron.schedule( deviceCron, () => {
-    const updatedDevices = [];
     const devices = updater.deviceTable;
+    this.insertCameraState(devices).then((updatedDevices) => this.sendDevices(updatedDevices));
+  });
+};
+
+/**
+ * Updates the device object by inserting a field called 'running' when the device is a camera.
+ * 'running' is 1 if we have received a camera records in the last 2 minutes, otherwise it's 0.
+ * @param {Array} devices - The list of devices.
+ * @return {Array} The list of devices.
+ */
+exports.insertCameraState = async function insertCameraState(devices) {
+  return new Promise( (resolve) => {
+    const updatedDevices = [];
     const date = new Date();
     Promise.all(devices.map(async (device) => {
       if (device.deviceType == 'camera') {
@@ -39,7 +51,7 @@ exports.run_scheduler = function(deviceCron) {
         updatedDevices.push(device);
       }
     })).then(() => {
-      sendDevices(updatedDevices);
+      resolve(updatedDevices);
     });
   });
 };
@@ -48,7 +60,7 @@ exports.run_scheduler = function(deviceCron) {
  * Sends the devices to the organisation server
  * @param {Array} devices - The list of devices and their state, that will be sent to the organisation server.
  */
-function sendDevices(devices) {
+exports.sendDevices = async function sendDevices(devices) {
   const body = {
     'site_name': process.env.SITE,
     'url': `https://www.qnamaker.ai/Edit/KnowledgeBase?kbId=${process.env.KB_ID}`,
@@ -60,6 +72,7 @@ function sendDevices(devices) {
   const options = {
     hostname: process.env.ORG_HOST,
     port: process.env.ORG_PORT,
+    timeout: 1000,
     path: '/profile',
     method: 'POST',
     headers: {
@@ -67,14 +80,20 @@ function sendDevices(devices) {
       'Content-Length': encodedDevices.length,
     },
   };
-  const req = http.request(options, (res) => {
-    res.on('data', (d) => {
-      console.debug('Devices sent to organisation server successfully');
+  return new Promise( (resolve) => {
+    const req = http.request(options, (res) => {
+      const status = res.statusCode;
+      res.on('data', (d) => {
+        console.debug('Devices sent to organisation server successfully');
+        resolve(res.statusCode);
+      });
     });
+    req.on('error', (error) => {
+      console.error('Could not send devices to the organisation server');
+      resolve(500);
+    });
+
+    req.write(encodedDevices);
+    req.end();
   });
-  req.on('error', (error) => {
-    console.error(error);
-  });
-  req.write(encodedDevices);
-  req.end();
-}
+};

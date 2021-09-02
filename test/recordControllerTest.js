@@ -73,17 +73,19 @@ describe('Record API', () => {
             done();
           });
     });
-  });
 
-  // GET
-  describe('Test GET route /records', () => {
-    it('It should return all records', (done) => {
+    it('It should return an error', (done) => {
+      const record = {
+        'deviceId': cameraId,
+        'recordType': 1,
+        'queueing': 7,
+      };
       chai.request(server)
-          .get('/records')
+          .post('/records')
+          .set('content-type', 'application/json')
+          .send(record)
           .end((err, response) => {
-            response.should.have.status(200);
-            response.body.should.be.a('array');
-            response.body.length.should.not.be.eq(0);
+            response.should.have.status(400);
             done();
           });
     });
@@ -123,7 +125,7 @@ describe('Record API', () => {
           });
     });
     it('It should return latest records of new floor', (done) => {
-      const sentence = 'You are now on the 999th floor. On this floor you can find the Main entrance area. In the Main entrance area there are 7 people in the queue. ';
+      const sentence = 'You are now on the 999th floor. On this floor you can find the Main entrance area. ';
       chai.request(server)
           .get(`/notifications/${sensorId}?lastFloor=1`)
           .end((err, response) => {

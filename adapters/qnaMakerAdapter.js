@@ -27,16 +27,10 @@ exports.generateAnswer = async (question) => {
 };
 // </GenerateAnswer>
 
-exports.run = async (deviceCron) => {
+exports.run = async () => {
   // <AuthorizationQuery>
   console.log('Starting QnA Maker runtime ' + process.env.KB_ENDPOINT_KEY);
   const queryRuntimeCredentials = new msRest.ApiKeyCredentials({inHeader: {'Authorization': 'EndpointKey ' + process.env.KB_ENDPOINT_KEY}});
   runtimeClient = new qnamakerRuntime.QnAMakerRuntimeClient(queryRuntimeCredentials, process.env.KB_HOST);
-
-  cron.schedule( deviceCron, () => {
-    if (runtimeClient == null) {
-      runtimeClient = new qnamakerRuntime.QnAMakerRuntimeClient(queryRuntimeCredentials, process.env.KB_HOST);
-    }
-  });
   // </AuthorizationQuery>
 };

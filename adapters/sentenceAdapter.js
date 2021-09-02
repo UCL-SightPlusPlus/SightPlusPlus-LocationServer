@@ -28,16 +28,13 @@ exports.createSameFloorSentencesFromRecords = function(beacon, records, recordTy
  * @param {Array} locations - All the rooms/areas that are in the same floor as the beacon.
  * @return {string} The sentences that will be returned to the user.
  */
-exports.createDiffFloorSentencesFromRecords = function(beacon, records, locations) {
+exports.createDiffFloorSentencesFromRecords = function(beacon, locations) {
   const sentences = [];
-  const sentence = `You are now on the ${this.ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area , the ')} area. `;
+  const sentence = `You are now on the ${this.ordinalSuffixOf(beacon.floor)} floor. On this floor you can find the ${locations.join(' area, the ')} area. `;
   if (locations.length > 1) {
-    sentences.push(sentence.substring(0, sentence.lastIndexOf(',')) + 'and' + sentence.substring(sentence.lastIndexOf(',')+1, sentence.length));
+    sentences.push(sentence.substring(0, sentence.lastIndexOf(',')) + ' and' + sentence.substring(sentence.lastIndexOf(',')+1, sentence.length));
   } else {
     sentences.push(sentence);
-  }
-  if (records.length > 0) {
-    records.forEach( (record) => sentences.push(`In the ${record.newLoc} area ${this.createSentence(record)}`));
   }
   return sentences.join('');
 };
@@ -68,15 +65,15 @@ exports.locationSentence = function locationSentence(beacon) {
  */
 exports.createSentence = function createSentenceUsingRecord(record) {
   let sentence = '';
-  const targetId = {
+  const recordType = {
     'queueing': 1,
     'freeSeats': 2,
     'event': 3,
   };
   if (record != null) {
-    if (record.recordType == targetId.queueing) {
+    if (record.recordType == recordType.queueing) {
       sentence = `there are ${record.queueing} people in the queue. `;
-    } else if (record.recordType == targetId.freeSeats) {
+    } else if (record.recordType == recordType.freeSeats) {
       if (record.freeSeats == 1) {
         sentence = `${record.freeSeats} seat is available. `;
       } else {
