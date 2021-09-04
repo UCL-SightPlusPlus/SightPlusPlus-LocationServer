@@ -28,6 +28,6 @@ The AVINA location server is a containerized application, so it can easily be de
 
 ### Deploying AVINA location server to a server of your choosing
 - Download the code.
-- Once downloaded, under the `/scripts` directory (e.g.orca-win-x64/Scripts) you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
+- Once downloaded, under the `/scripts` directory you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
   Once run (with Powershell Core) the script will ask you to fill in the required settings to configure the `.env` file, such as the [Knowledge Base ID, the Knowledge Base Host and the Endpoint Key that were generated in an earlier step](#create-an-azure-qna-service-and-a-knowledgebase).
 - After configuring the application, you can deploy it by running `docker-compose up --build -d`.
