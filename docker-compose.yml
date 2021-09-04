@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  sightplusplus:
-    image: locationserver.azurecr.io/sightplusplus
+  avina:
+    image: avinalocationacr.azurecr.io/avina
     restart: always
     build:
       context: .
@@ -11,8 +11,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 8080:8080
-      - 7979:7979
+      - 9999:9999
     links:
       - mongo
   mongo:
@@ -20,5 +19,5 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-    volumes: 
+    volumes:
       - ./data:/data/db
