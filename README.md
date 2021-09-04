@@ -13,11 +13,12 @@ Since AVINA integrates with a Chatbot service to answer the user's questions, th
 
 ![QnA Service Creation](https://user-images.githubusercontent.com/19215701/131325569-0d4a04df-2054-4673-9ae6-79ddf531d842.png)
 
-The Knowledge Base ID is in between the `/knowledgebases/{Knowledge Base ID}/generateAnswer`.
-
-The Knowledge Base Host is https url in the 2nd line without the `/qnamaker`.
+The Knowledge Base Host is the HTTPS URL in the 2nd line without the `/qnamaker`. (ex. `https://gosh-bot.azurewebsites.net`)
 
 The Endpoint Key is located on the 3rd line after `EndpointKey {EndpointKey}`.
+
+The Knowledge Base ID is at the 1st line between the `/knowledgebases/{Knowledge Base ID}/generateAnswer`.
+
 
 **⚠️Please keep a copy of these values because we are going to use them later on the deployment.**
 
