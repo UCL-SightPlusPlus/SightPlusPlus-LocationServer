@@ -13,11 +13,12 @@ Since AVINA integrates with a Chatbot service to answer the user's questions, th
 
 ![QnA Service Creation](https://user-images.githubusercontent.com/19215701/131325569-0d4a04df-2054-4673-9ae6-79ddf531d842.png)
 
-The Knowledge Base ID is in between the `/knowledgebases/{Knowledge Base ID}/generateAnswer`.
-
-The Knowledge Base Host is https url in the 2nd line without the `/qnamaker`.
+The Knowledge Base Host is the HTTPS URL in the 2nd line without the `/qnamaker`. (ex. `https://gosh-bot.azurewebsites.net`)
 
 The Endpoint Key is located on the 3rd line after `EndpointKey {EndpointKey}`.
+
+The Knowledge Base ID is at the 1st line between the `/knowledgebases/{Knowledge Base ID}/generateAnswer`.
+
 
 **⚠️Please keep a copy of these values because we are going to use them later on the deployment.**
 
@@ -27,6 +28,6 @@ The AVINA location server is a containerized application, so it can easily be de
 
 ### Deploying AVINA location server to a server of your choosing
 - Download the code.
-- Once downloaded, under the `/scripts` directory (e.g.orca-win-x64/Scripts) you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
+- Once downloaded, under the `/scripts` directory you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
   Once run (with Powershell Core) the script will ask you to fill in the required settings to configure the `.env` file, such as the [Knowledge Base ID, the Knowledge Base Host and the Endpoint Key that were generated in an earlier step](#create-an-azure-qna-service-and-a-knowledgebase).
 - After configuring the application, you can deploy it by running `docker-compose up --build -d`.
