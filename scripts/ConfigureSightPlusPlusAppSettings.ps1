@@ -8,13 +8,13 @@ $appsettings = Get-Content $appsettingsPath -Raw
 #Replace values for sharepoint
 Write-Host "Please provide the following settings to configure the application"
 
-$site = Read-Host "The name of this site"
+$site = Read-Host "The name of this site/location"
 $appsettings = $appsettings -replace "SITE=", "SITE=$site"
 
 $orgHost = Read-Host "The organisation host to connect to"
 $appsettings = $appsettings -replace "ORG_HOST=", "ORG_HOST=$orgHost"
 
-$enableQnAMaker = Read-Host "Would you like to connect Sight++ to an Azure QnA Maker service to enable ChatBot capabilities?`n([Y]es/[N])o"
+$enableQnAMaker = Read-Host "Would you like to connect Sight++ to an Azure QnA Maker service to enable ChatBot capabilities?`n([Y]es/[N]o)"
 If ($enableQnAMaker.ToUpper() -match "Y" -or $enableQnAMaker.ToUpper() -match "YES") {
     $kbHost = Read-Host "Your Knowledge Base host (e.g. https://my-knowledge-base.azurewebsites.net)"
     $appsettings = $appsettings -replace "KB_HOST=", "KB_HOST=$kbHost"
@@ -27,7 +27,7 @@ If ($enableQnAMaker.ToUpper() -match "Y" -or $enableQnAMaker.ToUpper() -match "Y
 }
 
 # Replace values for database
-$enableDatabase = Read-Host "Would you like to setup a username and a password for the MongoDB?`n([Y]es/[N])o"
+$enableDatabase = Read-Host "Would you like to setup a username and a password for the MongoDB?`n([Y]es/[N]o)"
 If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "YES") {
     $Uid = Read-Host "Database User ID"
     $appsettings = $appsettings -replace "DATABASE_USER=", "DATABASE_USER=$Uid"
@@ -36,7 +36,7 @@ If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "Y
     $appsettings = $appsettings -replace "DATABASE_PASSWORD=", "DATABASE_PASSWORD=$Password"
 }
 
-$enableDatabase = Read-Host "Would you like to setup SSL for the REST API?`n([Y]es/[N])o. Note: You must have openssl installed"
+$enableDatabase = Read-Host "Would you like to setup SSL for the REST API?`n([Y]es/[N]o). Note: You must have openssl installed"
 If ($enableDatabase.ToUpper() -match "Y" -or $enableDatabase.ToUpper() -match "YES") {
     mkdir -p "../certs"
     $sslHost = Read-Host "The host you would like the REST API to run on (e.g IP or domain)"
