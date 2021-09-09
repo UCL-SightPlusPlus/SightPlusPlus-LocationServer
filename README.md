@@ -32,3 +32,58 @@ The AVINA location server is a containerized application, so it can easily be de
 - Once downloaded, under the `/scripts` directory you will find a Powershell Core script named `ConfigureSightPlusPlusAppSettings.ps1`.  
   Once run (with Powershell Core) the script will ask you to fill in the required settings to configure the `.env` file, such as the [Knowledge Base ID, the Knowledge Base Host and the Endpoint Key that were generated in an earlier step](#create-an-azure-qna-service-and-a-knowledgebase).
 - After configuring the application, you can deploy it by running `docker-compose up --build -d`.
+
+## Working with AVINA
+Once the deployment is complete, we can start setting up the devices.
+To add devices to your database, you can send POST requests to `http://{IP-of-your-server-or-localhost-if-deployed-locally}:9999/devices`
+The schema of the JSON request can be found [here](api/schemas/device-schema.json).
+
+An example of a camera device is:
+```{
+    "_id": "1",
+    "deviceType": "camera",
+    "deviceLocation": "Reception",
+    "site": "GOSH DRIVE",
+    "isIndoor": true,
+    "floor": 0
+}
+```
+
+An example of a BLE device:
+```
+{
+    "_id": "2",
+    "deviceType": "BLE",
+    "deviceLocation": "Reception",
+    "site": "GOSH DRIVE",
+    "isIndoor": true,
+    "floor": 0
+}
+```
+
+Once you have set up at least one camera and one BLE in the same location, you are ready to use AVINA.
+
+### Camera Setup
+For the camera setup so that it will send its records to the server, follow the instructions [here](https://github.com/UCL-SightPlusPlus/SightPlusPlus-ComputerVision).
+
+If don't want to setup the camera right now, you can mock a camera's record by sending a POST request to `http://{IP-of-your-server-or-localhost-if-deployed-locally}:9999/records`
+The schema of the JSON request can be found [here](api/schemas/record-schema.json).
+An example of a record regarding queueing:
+```{
+    "timestamp": "2021-08-31T18:25:43.511Z",
+    "deviceId": "1",
+    "recordType": 1,
+    "queueing": 2 //# of people waiting in the queue.
+}
+```
+An example of a record regarding empty seats available:
+```{
+    "timestamp": "2021-08-31T18:25:43.511Z",
+    "deviceId": "1",
+    "recordType": 2,
+    "freeSeats": 2 //# of empty chairs.
+}
+```
+
+## Next Steps
+Now you can continue with the [mobile app setup](https://github.com/UCL-SightPlusPlus/SightPlusPlus-App).

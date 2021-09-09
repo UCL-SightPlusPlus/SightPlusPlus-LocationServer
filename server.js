@@ -1,5 +1,6 @@
 require('dotenv').config(); // load env vars in global var process.env
 const express = require('express');
+const helmet = require('helmet');
 const app = express();
 const fs = require('fs');
 const https = require('https');
@@ -37,6 +38,8 @@ orgServerUpdater.run_scheduler(cronExpression);
 // Run the Azure QnA Service
 qnaAdapter.run();
 
+app.use(helmet());
+app.disable('x-powered-by');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.setMaxListeners(9);

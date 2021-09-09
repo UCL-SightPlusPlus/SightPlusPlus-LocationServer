@@ -1,0 +1,105 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "default": {},
+    "description": "The schema specifying all cameras, sensors and IOT devices that are placed in a site.",
+    "examples": [
+        {
+            "_id": 1,
+            "deviceType": "camera,sensor",
+            "deviceLocation": "Main entrance",
+            "site": "GOSH DRIVE",
+            "isIndoor": true,
+            "floor": 1,
+            "maxOccupancy": 50
+        }
+    ],
+    "required": [
+        "_id",
+        "deviceType",
+        "deviceLocation",
+        "site",
+        "isIndoor"
+    ],
+    "title": "The device schema of the database",
+    "type": "object",
+    "properties": {
+        "_id": {
+            "$id": "#/properties/_id",
+            "type": "integer",
+            "title": "The device's ID",
+            "description": "The unique ID that a device has.",
+            "default": "",
+            "examples": [
+                1,
+                2,
+                3
+            ]
+        },
+        "deviceType": {
+            "$id": "#/properties/deviceType",
+            "type": "string",
+            "title": "The type of the device",
+            "description": "The type of device that is being used to capture real-time data.",
+            "default": "",
+            "examples": [
+                "camera"
+            ],
+            "enum": [
+                "camera",
+                "BLE"
+            ]
+        },
+        "deviceLocation": {
+            "$id": "#/properties/deviceLocation",
+            "type": "string",
+            "title": "The location of the device",
+            "description": "The location where the device is placed.",
+            "default": "",
+            "examples": [
+                "Main entrance"
+            ]
+        },
+        "site": {
+            "$id": "#/properties/site",
+            "type": "string",
+            "title": "The site of the device",
+            "description": "The site where the device is placed.",
+            "default": "",
+            "examples": [
+                "GOSH DRIVE"
+            ]
+        },
+        "isIndoor": {
+            "$id": "#/properties/isIndoor",
+            "type": "boolean",
+            "title": "The attribute specifying if the device's location is indoor",
+            "description": "The attribute can be true for indoor and false for outdoor",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "floor": {
+            "$id": "#/properties/floor",
+            "type": "integer",
+            "title": "The floor where the device is placed",
+            "description": "The floor where the device is placed, if isIndoor is set to true",
+            "default": "",
+            "examples": [
+                1
+            ]
+        },
+        "maxOccupancy": {
+            "$id": "#/properties/maxOccupancy",
+            "type": "integer",
+            "title": "The maxOccupancy schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                50
+            ]
+        }
+    },
+    "additionalProperties": true
+}
