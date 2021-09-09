@@ -1,7 +1,7 @@
 {
-  "name": "sightplusplus",
+  "name": "avina-ls",
   "version": "1.0.0",
-  "description": "UCL's Sight++ v3 project .",
+  "description": "UCL's AVINA with Sight++ v3 project .",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -37,6 +37,7 @@
     "chai-http": "^4.3.0",
     "dotnet": "^1.1.4",
     "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "keyword-extractor": "0.0.20",
     "mocha": "^9.0.2",
     "mongoose": "^5.13.2",

@@ -61,9 +61,11 @@ exports.insertCameraState = async function insertCameraState(devices) {
  * @param {Array} devices - The list of devices and their state, that will be sent to the organisation server.
  */
 exports.sendDevices = async function sendDevices(devices) {
+  const url = (process.env.SSL == 'NO') ? 'http' : 'https';
   const body = {
     'site_name': process.env.SITE,
-    'url': `https://www.qnamaker.ai/Edit/KnowledgeBase?kbId=${process.env.KB_ID}`,
+    'qna_url': `https://www.qnamaker.ai/Edit/KnowledgeBase?kbId=${process.env.KB_ID}`,
+    'server_url': `${url}://localhost:${process.env.REST_PORT}`,
     'devices': devices,
   };
   const encodedDevices = new TextEncoder().encode(
