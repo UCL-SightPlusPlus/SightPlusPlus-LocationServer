@@ -7,7 +7,7 @@ AVINA is an open source systems architecture for businesses and organisations to
 - An Azure account with access to QnA service.
 - [Docker](https://www.docker.com/get-started)
 - [Powershell **Core**](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1)
-- Complete the Organisation server installation & deployment as you will be asked the Domain Name or IP of the organisation server during setup.
+- Complete the [Organisation server installation & deployment](https://github.com/UCL-SightPlusPlus/SightPlusPlus-OrganisationServer) as you will be asked the Domain Name or IP of the organisation server during setup.
 
 ## Create an Azure QnA Service and a KnowledgeBase
 Since AVINA integrates with a Chatbot service to answer the user's questions, the relevant information about the service must be provided when setting up the application. To create the Azure QnA Service and the Knowledge Base navigate to [Azure QnA Maker](https://www.qnamaker.ai/Create). Follow the instructions to complete the creation of the chatbot. After the creation of the service, you will be redirected to page like this:
